@@ -11,6 +11,16 @@ Arduino Uno (moisture + DHT11 + DS18B20)  --USB serial-->  serial_bridge.py  --I
                 +--> ML engine (calibrated classifier + QW-TC + abstention + context re-ranking)
 ```
 
+### Dataset credit
+
+The models are trained on the **Crop Recommendation Dataset** by **Atharva Ingle**, published on Kaggle (2020):
+https://www.kaggle.com/datasets/atharvaingle/crop-recommendation-dataset
+
+- `data/raw/crop_recommendation.csv` is the author's file, unchanged (2,200 rows, 22 crops).
+- `data/processed/agrismart_sensor_dataset.csv` is derived from it by `ml/build_dataset.py`. N, P, K and rainfall are dropped, and soil moisture, soil temperature and soil type are calculated with documented formulas (see §4).
+
+All credit for the original data goes to its author. Please cite the dataset (reference [1] in §9) if you reuse it, and check the Kaggle page for its licence terms.
+
 ---
 
 ## 1. Folder structure
