@@ -1,0 +1,6 @@
+fault_rate,A_snapshot_raw,B_snapshot_validated,C_feature_mean_raw,D_prob_mean_validated,E_feature_mean_validated,F_QW-TC_no_recency (ablation),G_QW-TC_hourly_recency_tau72h (ablation),H_QW-TC (proposed)
+0.0,0.5795,0.5795,0.9023,0.8091,0.9023,0.9023,0.8818,0.9023
+0.05,0.6136,0.6159,0.8682,0.8068,0.8977,0.8977,0.8841,0.8955
+0.1,0.5886,0.5864,0.8205,0.7932,0.8727,0.8659,0.8705,0.875
+0.2,0.5955,0.6,0.8068,0.825,0.8705,0.8727,0.8795,0.8818
+0.3,0.5386,0.5432,0.7682,0.8227,0.8477,0.8568,0.8432,0.8568

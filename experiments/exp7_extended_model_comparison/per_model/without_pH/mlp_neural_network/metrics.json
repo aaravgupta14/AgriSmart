@@ -1,0 +1,18 @@
+{
+  "model": "MLP Neural Network",
+  "feature_set": "without_pH",
+  "cv_accuracy": 0.7781818181818181,
+  "cv_accuracy_std": 0.023992078582539354,
+  "cv_f1_macro": 0.7721991499845879,
+  "cv_f1_macro_std": 0.026156685619744352,
+  "cv_top3_accuracy": 0.9368181818181818,
+  "holdout_accuracy": 0.8068181818181818,
+  "holdout_precision_macro": 0.8142680275354439,
+  "holdout_recall_macro": 0.806818181818182,
+  "holdout_f1_macro": 0.8001421657481333,
+  "holdout_top3_accuracy": 0.9863636363636363,
+  "holdout_log_loss": 0.544403571973648,
+  "fit_seconds": 2.111,
+  "cv_seconds": 1.41,
+  "predict_ms_per_sample": 0.0182
+}

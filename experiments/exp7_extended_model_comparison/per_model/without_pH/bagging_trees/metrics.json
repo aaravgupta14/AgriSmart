@@ -1,0 +1,18 @@
+{
+  "model": "Bagging (trees)",
+  "feature_set": "without_pH",
+  "cv_accuracy": 0.8209090909090909,
+  "cv_accuracy_std": 0.01197449079301771,
+  "cv_f1_macro": 0.8188865243023695,
+  "cv_f1_macro_std": 0.012948817213435514,
+  "cv_top3_accuracy": 0.9436363636363636,
+  "holdout_accuracy": 0.7909090909090909,
+  "holdout_precision_macro": 0.790065441477445,
+  "holdout_recall_macro": 0.7909090909090909,
+  "holdout_f1_macro": 0.7849148224853675,
+  "holdout_top3_accuracy": 0.975,
+  "holdout_log_loss": 0.7612624560953458,
+  "fit_seconds": 0.452,
+  "cv_seconds": 1.38,
+  "predict_ms_per_sample": 0.5526
+}

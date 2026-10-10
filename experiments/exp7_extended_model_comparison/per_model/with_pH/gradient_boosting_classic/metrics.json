@@ -1,0 +1,18 @@
+{
+  "model": "Gradient Boosting (classic)",
+  "feature_set": "with_pH",
+  "cv_accuracy": 0.8600000000000001,
+  "cv_accuracy_std": 0.012415000257952405,
+  "cv_f1_macro": 0.8599840340536264,
+  "cv_f1_macro_std": 0.013145753644469186,
+  "cv_top3_accuracy": 0.9631818181818181,
+  "holdout_accuracy": 0.875,
+  "holdout_precision_macro": 0.878287563299617,
+  "holdout_recall_macro": 0.875,
+  "holdout_f1_macro": 0.8751276547646373,
+  "holdout_top3_accuracy": 0.990909090909091,
+  "holdout_log_loss": 0.40750733191338584,
+  "fit_seconds": 13.206,
+  "cv_seconds": 14.71,
+  "predict_ms_per_sample": 0.0585
+}

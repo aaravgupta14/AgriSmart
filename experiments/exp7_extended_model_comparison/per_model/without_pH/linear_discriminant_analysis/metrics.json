@@ -1,0 +1,18 @@
+{
+  "model": "Linear Discriminant Analysis",
+  "feature_set": "without_pH",
+  "cv_accuracy": 0.6677272727272727,
+  "cv_accuracy_std": 0.0196771462017394,
+  "cv_f1_macro": 0.6590966172543917,
+  "cv_f1_macro_std": 0.01778507672108193,
+  "cv_top3_accuracy": 0.8718181818181818,
+  "holdout_accuracy": 0.6431818181818182,
+  "holdout_precision_macro": 0.6444163698901414,
+  "holdout_recall_macro": 0.6431818181818182,
+  "holdout_f1_macro": 0.6322792069664281,
+  "holdout_top3_accuracy": 0.9363636363636364,
+  "holdout_log_loss": 1.0078750013989053,
+  "fit_seconds": 0.038,
+  "cv_seconds": 0.1,
+  "predict_ms_per_sample": 0.0291
+}

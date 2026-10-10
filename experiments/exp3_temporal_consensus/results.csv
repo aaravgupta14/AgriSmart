@@ -1,0 +1,41 @@
+fault_rate,method,top1_accuracy,top3_accuracy
+0.0,A_snapshot_raw,0.5795,0.8409
+0.0,B_snapshot_validated,0.5795,0.8409
+0.0,C_feature_mean_raw,0.9023,0.9909
+0.0,D_prob_mean_validated,0.8091,0.9795
+0.0,E_feature_mean_validated,0.9023,0.9909
+0.0,F_QW-TC_no_recency (ablation),0.9023,0.9909
+0.0,G_QW-TC_hourly_recency_tau72h (ablation),0.8818,0.9932
+0.0,H_QW-TC (proposed),0.9023,0.9932
+0.05,A_snapshot_raw,0.6136,0.85
+0.05,B_snapshot_validated,0.6159,0.8545
+0.05,C_feature_mean_raw,0.8682,0.9909
+0.05,D_prob_mean_validated,0.8068,0.9795
+0.05,E_feature_mean_validated,0.8977,0.9932
+0.05,F_QW-TC_no_recency (ablation),0.8977,0.9909
+0.05,G_QW-TC_hourly_recency_tau72h (ablation),0.8841,0.9955
+0.05,H_QW-TC (proposed),0.8955,0.9909
+0.1,A_snapshot_raw,0.5886,0.825
+0.1,B_snapshot_validated,0.5864,0.8295
+0.1,C_feature_mean_raw,0.8205,0.9818
+0.1,D_prob_mean_validated,0.7932,0.9773
+0.1,E_feature_mean_validated,0.8727,0.9886
+0.1,F_QW-TC_no_recency (ablation),0.8659,0.9886
+0.1,G_QW-TC_hourly_recency_tau72h (ablation),0.8705,0.9864
+0.1,H_QW-TC (proposed),0.875,0.9864
+0.2,A_snapshot_raw,0.5955,0.8159
+0.2,B_snapshot_validated,0.6,0.8318
+0.2,C_feature_mean_raw,0.8068,0.975
+0.2,D_prob_mean_validated,0.825,0.9795
+0.2,E_feature_mean_validated,0.8705,0.9795
+0.2,F_QW-TC_no_recency (ablation),0.8727,0.9864
+0.2,G_QW-TC_hourly_recency_tau72h (ablation),0.8795,0.9909
+0.2,H_QW-TC (proposed),0.8818,0.9909
+0.3,A_snapshot_raw,0.5386,0.7773
+0.3,B_snapshot_validated,0.5432,0.7886
+0.3,C_feature_mean_raw,0.7682,0.9545
+0.3,D_prob_mean_validated,0.8227,0.9682
+0.3,E_feature_mean_validated,0.8477,0.9773
+0.3,F_QW-TC_no_recency (ablation),0.8568,0.9864
+0.3,G_QW-TC_hourly_recency_tau72h (ablation),0.8432,0.9841
+0.3,H_QW-TC (proposed),0.8568,0.9864

@@ -1,0 +1,5 @@
+scenario,strategy,accuracy
+pH measured,with-pH model,0.9023
+pH missing,"with-pH model, pH imputed = training median",0.7909
+pH missing,"with-pH model, pH imputed = neutral 7.0",0.6773
+pH missing,sensor-only model (proposed adaptive switch),0.8136

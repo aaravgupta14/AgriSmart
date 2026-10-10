@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Cooperative overview</h1><p>Live state of plots, sensor nodes and recommendations.</p></div>
+  <a class="btn" href="{{ url_for('recommend') }}">Recommend a crop →</a>
+</div>
+
+<div class="grid g4" style="margin-bottom:18px">
+  <div class="stat"><div class="k">Plots</div><div class="v">{{ stats.plots }}</div><div class="s">{{ stats.farmers }} farmers</div></div>
+  <div class="stat"><div class="k">Active nodes</div><div class="v">{{ stats.nodes }}</div><div class="s">{{ stats.logs_24h }} readings in last 24 h</div></div>
+  <div class="stat"><div class="k">Soil readings</div><div class="v">{{ "{:,}".format(stats.logs) }}</div><div class="s">sensor + manual</div></div>
+  <div class="stat"><div class="k">Crops growing</div><div class="v">{{ stats.growing }}</div><div class="s">{{ stats.runs }} recommendations issued</div></div>
+</div>
+
+<div class="card">
+  <h2>Plots</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Plot</th><th>Farmer</th><th>Soil</th><th class="num">Acres</th><th class="num">Moisture %</th><th class="num">Soil °C</th><th class="num">Air °C</th><th class="num">RH %</th><th class="num">pH</th><th>Last crop</th><th>Source</th><th></th></tr>
+    {% for p in plots %}
+    <tr>
+      <td><a href="{{ url_for('plot_detail', plot_id=p.plot_id) }}">#{{ p.plot_id }} {{ p.plot_name }}</a></td>
+      <td>{{ p.farmer }} <span class="muted small">· {{ p.village }}</span></td>
+      <td>{{ p.soil_type }}</td>
+      <td class="num">{{ p.area_acres|num(1) }}</td>
+      <td class="num">{{ p.moisture_pct|num(1) }}</td>
+      <td class="num">{{ p.soil_temp_c|num(1) }}</td>
+      <td class="num">{{ p.air_temp_c|num(0) }}</td>
+      <td class="num">{{ p.humidity_pct|num(0) }}</td>
+      <td class="num">{% if p.latest_ph %}{{ p.latest_ph|num(2) }}{% else %}<span class="badge b-mute">none</span>{% endif %}</td>
+      <td>{% if p.last_crop %}<span style="text-transform:capitalize">{{ p.last_crop }}</span> {% if p.last_crop_status=='GROWING' %}<span class="badge b-ok">growing</span>{% endif %}{% else %}-{% endif %}</td>
+      <td>{% if p.nodes %}<span class="badge b-info">{{ p.nodes }}</span>{% else %}<span class="badge b-mute">manual</span>{% endif %}</td>
+      <td><a class="btn small ghost" href="{{ url_for('recommend', plot_id=p.plot_id) }}">Recommend</a></td>
+    </tr>
+    {% endfor %}
+  </table></div>
+</div>
+
+<div class="grid g2">
+  <div class="card">
+    <h2>Sensor nodes</h2>
+    <table>
+      <tr><th>Node</th><th>Plot</th><th>Last seen</th><th class="num">Readings 24 h</th><th class="num">Avg quality 7 d</th></tr>
+      {% for n in nodes %}
+      <tr>
+        <td class="mono">{{ n.node_id }}</td><td>{{ n.plot_name }}</td>
+        <td>{% if n.minutes_since_seen is not none and n.minutes_since_seen < 60 %}<span class="badge b-ok">online</span>{% else %}<span class="badge b-bad">offline</span>{% endif %}
+            <span class="small muted">{{ n.last_seen_ts.strftime('%d %b %H:%M') if n.last_seen_ts else '-' }}</span></td>
+        <td class="num">{{ n.readings_last_24h }}</td>
+        <td class="num">{{ n.avg_quality_7d|num(3) if n.avg_quality_7d is not none else '-' }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    <p class="small muted">Quality is computed when a recommendation is run (range, spike and consistency checks).</p>
+  </div>
+  <div class="card">
+    <h2>Recent recommendations</h2>
+    {% if recent %}
+    <table>
+      <tr><th>#</th><th>Plot</th><th>Top crop</th><th class="num">Score</th><th>Status</th></tr>
+      {% for r in recent %}
+      <tr><td class="mono">{{ r.run_id }}</td><td><a href="{{ url_for('plot_detail', plot_id=r.plot_id) }}">{{ r.plot_name }}</a></td>
+          <td style="text-transform:capitalize">{{ r.crop_name }}</td><td class="num">{{ r.final_score|pct }}</td>
+          <td>{% include "_status_badge.html" %}</td></tr>
+      {% endfor %}
+    </table>
+    {% else %}<p class="muted">No recommendations yet. Open <a href="{{ url_for('recommend') }}">Recommend a crop</a> and run one.</p>{% endif %}
+  </div>
+</div>
+{% endblock %}

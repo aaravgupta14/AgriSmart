@@ -1,0 +1,18 @@
+{
+  "model": "Quadratic Discriminant Analysis",
+  "feature_set": "with_pH",
+  "cv_accuracy": 0.7672727272727272,
+  "cv_accuracy_std": 0.012331509060227749,
+  "cv_f1_macro": 0.7582113169943054,
+  "cv_f1_macro_std": 0.015107846573735607,
+  "cv_top3_accuracy": 0.9254545454545454,
+  "holdout_accuracy": 0.7931818181818182,
+  "holdout_precision_macro": 0.8161649602557624,
+  "holdout_recall_macro": 0.793181818181818,
+  "holdout_f1_macro": 0.7851431043604727,
+  "holdout_top3_accuracy": 0.9727272727272728,
+  "holdout_log_loss": 0.5920409091857335,
+  "fit_seconds": 0.043,
+  "cv_seconds": 0.11,
+  "predict_ms_per_sample": 0.0461
+}

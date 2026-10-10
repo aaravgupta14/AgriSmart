@@ -1,0 +1,11 @@
+# Python 3.10+ (tested on 3.13)
+flask>=3.0
+pymysql>=1.1
+cryptography>=42        # needed by PyMySQL for MySQL 8 default authentication
+pandas>=2.2
+numpy>=1.26
+scikit-learn==1.9.1     # saved models are tied to this version; if you change it, re-run scripts/run_pipeline
+joblib>=1.4
+matplotlib>=3.8
+tabulate>=0.9           # markdown tables in EXPERIMENTS_SUMMARY.md
+pyserial>=3.5           # Arduino serial bridge

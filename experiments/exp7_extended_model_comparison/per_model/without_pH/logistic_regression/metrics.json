@@ -1,0 +1,18 @@
+{
+  "model": "Logistic Regression",
+  "feature_set": "without_pH",
+  "cv_accuracy": 0.6713636363636365,
+  "cv_accuracy_std": 0.020154362979450318,
+  "cv_f1_macro": 0.6582395463515511,
+  "cv_f1_macro_std": 0.02064500363969772,
+  "cv_top3_accuracy": 0.8672727272727272,
+  "holdout_accuracy": 0.6727272727272727,
+  "holdout_precision_macro": 0.6638999321474506,
+  "holdout_recall_macro": 0.6727272727272727,
+  "holdout_f1_macro": 0.6587446152563948,
+  "holdout_top3_accuracy": 0.9409090909090909,
+  "holdout_log_loss": 1.0306733846947709,
+  "fit_seconds": 0.17,
+  "cv_seconds": 0.2,
+  "predict_ms_per_sample": 0.0144
+}

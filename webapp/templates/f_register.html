@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}New account{% endblock %}
+{% block content %}
+{% set existing = form.get('account') == 'existing' %}
+{% set sensor = form.get('collection', 'sensor') == 'sensor' %}
+<div class="page-head">
+  <div><h1>Set up your farm</h1>
+    <p>Four short steps. After this you will see your field's readings and which crops suit it.</p></div>
+</div>
+
+<form method="post" class="wizard">
+  {# ---------------- 1. who ---------------- #}
+  <div class="card">
+    <h2><span class="step dark">1</span> About you</h2>
+    <div class="choice-row">
+      <label class="choice"><input type="radio" name="account" value="new" {{ 'checked' if not existing }} onchange="toggle()"> I'm new here</label>
+      <label class="choice"><input type="radio" name="account" value="existing" {{ 'checked' if existing }} onchange="toggle()"> I already have an account – add another field</label>
+    </div>
+    <div id="newFarmer" class="form-grid">
+      <div class="field"><label>Your name</label><input name="full_name" value="{{ form.get('full_name', '') }}" placeholder="e.g. Ramesh V"></div>
+      <div class="field"><label>Mobile number</label><input name="phone_no" value="{{ form.get('phone_no', '') }}" inputmode="numeric" maxlength="10" placeholder="10 digits"></div>
+      <div class="field"><label>Village</label><input name="village" value="{{ form.get('village', '') }}"></div>
+      <div class="field"><label>Cooperative / FPO ID <span class="muted">optional</span></label><input name="coop_id" value="{{ form.get('coop_id', '') }}"></div>
+    </div>
+    <div id="oldFarmer" class="form-grid">
+      <div class="field"><label>Your name</label><select name="farmer_id"><option value="">choose…</option>
+        {% for x in farmers %}<option value="{{ x.farmer_id }}" {{ 'selected' if form.get('farmer_id')|string == x.farmer_id|string }}>{{ x.full_name }} · {{ x.village }}</option>{% endfor %}</select></div>
+    </div>
+  </div>
+
+  {# ---------------- 2. field ---------------- #}
+  <div class="card">
+    <h2><span class="step dark">2</span> Your field</h2>
+    <div class="form-grid">
+      <div class="field"><label>Field name</label><input name="plot_name" value="{{ form.get('plot_name', '') }}" placeholder="e.g. Well-side field"></div>
+      <div class="field"><label>Size (acres)</label><input name="area_acres" type="number" step="0.01" min="0.01" max="500" value="{{ form.get('area_acres', '') }}"></div>
+      <div class="field"><label>Latitude <span class="muted">optional</span></label><input name="latitude" type="number" step="0.000001" value="{{ form.get('latitude', '') }}"></div>
+      <div class="field"><label>Longitude <span class="muted">optional</span></label><input name="longitude" type="number" step="0.000001" value="{{ form.get('longitude', '') }}"></div>
+      <div class="field"><label>Soil pH <span class="muted">from your Soil Health Card</span></label>
+        <input name="ph" type="number" step="0.01" min="3.5" max="10" value="{{ form.get('ph', '') }}" placeholder="e.g. 6.8">
+        <span class="small muted">Typed in once – no pH sensor needed. Gives more accurate advice.</span></div>
+    </div>
+    <label style="margin-top:14px">Soil type <span class="muted">(see your Soil Health Card if unsure)</span></label>
+    <div class="soil-grid">
+      {% for s, d in [('Alluvial', 'Soft, fertile soil of river plains and deltas'),
+                      ('Black', 'Dark, sticky when wet, deep cracks when dry (cotton soil)'),
+                      ('Red', 'Reddish, light and loose; common on uplands'),
+                      ('Laterite', 'Brick-red, hard when dry; hilly, high-rain areas'),
+                      ('Sandy', 'Loose and gritty; water drains away fast')] %}
+      <label class="soil"><input type="radio" name="soil_type" value="{{ s }}" {{ 'checked' if form.get('soil_type') == s }} required>
+        <b>{{ s }}</b><span>{{ d }}</span></label>
+      {% endfor %}
+    </div>
+  </div>
+
+  {# ---------------- 3. data collection ---------------- #}
+  <div class="card">
+    <h2><span class="step dark">3</span> How will soil data be collected?</h2>
+    <div class="choice-row">
+      <label class="choice"><input type="radio" name="collection" value="sensor" {{ 'checked' if sensor }} onchange="toggle()"> With an AgriSmart sensor node (automatic)</label>
+      <label class="choice"><input type="radio" name="collection" value="manual" {{ 'checked' if not sensor }} onchange="toggle()"> No sensor – I'll enter readings by hand</label>
+    </div>
+    <div id="sensorBox">
+      <div class="form-grid">
+        <div class="field"><label>Sensor node ID</label><input name="node_id" value="{{ form.get('node_id', suggested_node) }}">
+          <span class="small muted">Must match <span class="mono">NODE_ID</span> in the Arduino sketch.</span></div>
+      </div>
+      <label style="margin-top:12px">Sensors connected to this node</label>
+      <div class="checks">
+        {% for k, lbl in SENSOR_CHOICES %}
+        <label class="choice"><input type="checkbox" name="s_{{ k }}" value="1" id="s_{{ k }}" onchange="toggle()"
+          {{ 'checked' if form.get('s_' ~ k) or (not form and k != 'PH') }}> {{ lbl }}</label>
+        {% endfor %}
+      </div>
+      <p id="noSoilTemp" class="flash warn small">Without the soil temperature probe, crop advice cannot be calculated from the sensor alone –
+        you will need to enter soil temperature by hand from time to time.</p>
+      <p class="small muted">No pH sensor is needed – soil pH is typed in above. An air-quality / CO₂ sensor is not needed either: crop advice does not use CO₂.</p>
+    </div>
+    <p id="manualBox" class="muted">You can enter readings any time from <b>Add soil data</b>. One reading a day is enough.</p>
+  </div>
+
+  {# ---------------- 4. optional start data ---------------- #}
+  <div class="card">
+    <h2><span class="step dark">4</span> Optional: get advice right away</h2>
+    <p class="small muted">Fill in what you know now – or skip this and let the sensor collect readings first.</p>
+    <h3>Last crop on this field</h3>
+    <div class="form-grid">
+      <div class="field"><label>Crop</label><select name="last_crop"><option value="">don't know / none</option>
+        {% for c in crops %}<option value="{{ c.crop_name }}" {{ 'selected' if form.get('last_crop') == c.crop_name }}>{{ crop_name(c.crop_name) }}</option>{% endfor %}</select></div>
+      <div class="field"><label>Harvested in</label><input type="month" name="last_harvest" value="{{ form.get('last_harvest', '') }}"></div>
+    </div>
+    <h3 style="margin-top:14px">First soil reading</h3>
+    <div class="form-grid">
+      <div class="field"><label>Soil moisture (%)</label><input name="moisture_pct" type="number" step="0.1" value="{{ form.get('moisture_pct', '') }}"></div>
+      <div class="field"><label>Soil temperature (°C)</label><input name="soil_temp_c" type="number" step="0.1" value="{{ form.get('soil_temp_c', '') }}"></div>
+      <div class="field"><label>Air temperature (°C)</label><input name="air_temp_c" type="number" step="0.1" value="{{ form.get('air_temp_c', '') }}"></div>
+      <div class="field"><label>Humidity (%)</label><input name="humidity_pct" type="number" step="1" value="{{ form.get('humidity_pct', '') }}"></div>
+    </div>
+  </div>
+
+  <button class="btn big">Create account and see my field →</button>
+</form>
+{% endblock %}
+{% block scripts %}
+<script>
+function toggle() {
+  const v = n => (document.querySelector(`input[name=${n}]:checked`) || {}).value;
+  const show = (id, on) => { const el = document.getElementById(id); el.style.display = on ? "" : "none";
+    el.querySelectorAll("input,select").forEach(i => i.disabled = !on); };
+  show("newFarmer", v("account") !== "existing");
+  show("oldFarmer", v("account") === "existing");
+  show("sensorBox", v("collection") === "sensor");
+  document.getElementById("manualBox").style.display = v("collection") === "sensor" ? "none" : "";
+  document.getElementById("noSoilTemp").style.display = document.getElementById("s_SOIL_TEMP").checked ? "none" : "";
+}
+toggle();
+</script>
+{% endblock %}

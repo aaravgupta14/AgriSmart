@@ -1,0 +1,1 @@
+{% set s = r.status if r is defined and r.status is defined else status %}{% if s == 'CONFIDENT' %}<span class="badge b-ok">confident</span>{% elif s == 'LOW_CONFIDENCE' %}<span class="badge b-warn">low confidence</span>{% elif s == 'OUT_OF_DISTRIBUTION' %}<span class="badge b-bad">unusual readings</span>{% else %}<span class="badge b-mute">{{ s|lower }}</span>{% endif %}

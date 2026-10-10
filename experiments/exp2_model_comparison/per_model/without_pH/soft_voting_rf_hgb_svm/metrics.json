@@ -1,0 +1,18 @@
+{
+  "model": "Soft Voting (RF+HGB+SVM)",
+  "feature_set": "without_pH",
+  "cv_accuracy": 0.8331818181818182,
+  "cv_accuracy_std": 0.02593698657761289,
+  "cv_f1_macro": 0.8327385322454137,
+  "cv_f1_macro_std": 0.026223152843588577,
+  "cv_top3_accuracy": 0.9577272727272728,
+  "holdout_accuracy": 0.8386363636363636,
+  "holdout_precision_macro": 0.845090238401341,
+  "holdout_recall_macro": 0.8386363636363634,
+  "holdout_f1_macro": 0.8354718665777402,
+  "holdout_top3_accuracy": 0.9886363636363636,
+  "holdout_log_loss": 0.4853961536607023,
+  "fit_seconds": 17.765,
+  "cv_seconds": 12.6,
+  "predict_ms_per_sample": 0.9559
+}

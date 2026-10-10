@@ -1,0 +1,35 @@
+{# expects `adv` (from farmer.advice) and optionally `p`, `month`, `can_grow` #}
+{% if adv.message %}<div class="verdict {{ adv.tone }}">{{ adv.message }}</div>{% endif %}
+<div class="advice-list">
+  {% for c in adv.cards %}
+  <div class="advice {{ 'first' if loop.first }}">
+    <div class="advice-head">
+      <span class="pill {{ 'best' if loop.first }}">{{ c.label }}</span>
+      <h3>{{ c.name }}</h3>
+      <div class="match"><b>{{ (100 * c.score)|round|int }}%</b> match</div>
+    </div>
+    <div class="meter"><span style="width: {{ (100 * c.score)|round(1) }}%"></span></div>
+
+    {% if c.good %}<ul class="why good">{% for g in c.good %}<li>{{ g }}</li>{% endfor %}</ul>{% endif %}
+    {% if c.warn %}<ul class="why warn">{% for w in c.warn %}<li>{{ w }}</li>{% endfor %}</ul>{% endif %}
+
+    <dl class="plan">
+      <dt>Season</dt><dd>{{ c.season }}</dd>
+      <dt>Time to harvest</dt><dd>about {{ c.days }} days{% if not c.blocked %} → ready around {{ c.harvest.strftime('%d %b %Y') }}{% endif %}</dd>
+      {% if c.yield_total %}<dt>Typical harvest</dt><dd>about {{ c.yield_total|num(0) }} kg from your {{ p.area_acres }} acres <span class="muted">({{ c.yield_per_acre|num(0) }} kg/acre)</span></dd>
+      {% else %}<dt>Typical yield</dt><dd>about {{ c.yield_per_acre|num(0) }} kg per acre</dd>{% endif %}
+      <dt>Fertiliser</dt><dd>{{ c.n_need }}</dd>
+    </dl>
+
+    {% if can_grow and not c.blocked %}
+    <form method="post" action="{{ url_for('grow') }}" class="grow">
+      <input type="hidden" name="plot_id" value="{{ p.plot_id }}"><input type="hidden" name="crop_name" value="{{ c.crop }}">
+      <input type="hidden" name="month" value="{{ month }}">
+      <label>Sowing date <input type="date" name="sow_date" value="{{ c.sow.isoformat() }}" required></label>
+      <button class="btn">I'll grow {{ c.name }}</button>
+    </form>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+<p class="small muted" style="margin-top:10px">Typical harvest and growing time are general textbook values for Indian conditions – your actual result depends on the weather, seed and care.</p>

@@ -1,0 +1,3 @@
+model,holdout_accuracy,holdout_top3_accuracy,log_loss,ECE_15bins,mean_top1_confidence
+Random Forest (uncalibrated),0.8045,0.9818,0.6066,0.0739,0.7537
+Random Forest (isotonic-calibrated),0.8136,0.9864,0.6133,0.051,0.8295

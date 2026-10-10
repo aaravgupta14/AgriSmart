@@ -1,0 +1,3 @@
+input,n,flagged_OOD
+real test readings,440,0.0045
+random in-range readings (no real crop condition),1000,0.701

@@ -1,0 +1,18 @@
+{
+  "model": "Hist Gradient Boosting",
+  "feature_set": "with_pH",
+  "cv_accuracy": 0.8881818181818183,
+  "cv_accuracy_std": 0.009685125342119344,
+  "cv_f1_macro": 0.8879461324429396,
+  "cv_f1_macro_std": 0.009663152059944015,
+  "cv_top3_accuracy": 0.9768181818181818,
+  "holdout_accuracy": 0.8909090909090909,
+  "holdout_precision_macro": 0.8952845323723728,
+  "holdout_recall_macro": 0.890909090909091,
+  "holdout_f1_macro": 0.8903906530586805,
+  "holdout_top3_accuracy": 0.9931818181818182,
+  "holdout_log_loss": 0.5623040196846468,
+  "fit_seconds": 16.807,
+  "cv_seconds": 8.52,
+  "predict_ms_per_sample": 0.2456
+}

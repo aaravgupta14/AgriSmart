@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Plots{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Plots</h1><p>Every plot belongs to one farmer; readings, cycles and recommendations hang off it.</p></div></div>
+<div class="card">
+  <div class="table-wrap"><table>
+    <tr><th>Plot</th><th>Farmer</th><th>Soil</th><th class="num">Acres</th><th>Location</th><th>Nodes</th><th>Last reading</th><th>Last crop</th></tr>
+    {% for p in plots %}
+    <tr><td><a href="{{ url_for('plot_detail', plot_id=p.plot_id) }}">#{{ p.plot_id }} {{ p.plot_name }}</a></td><td>{{ p.farmer }}</td><td>{{ p.soil_type }}</td>
+        <td class="num">{{ p.area_acres|num(2) }}</td><td class="mono small">{{ p.latitude }}, {{ p.longitude }}</td>
+        <td>{{ p.nodes or '-' }}</td><td class="small">{{ p.last_reading_ts or '-' }}</td><td style="text-transform:capitalize">{{ p.last_crop or '-' }}</td></tr>
+    {% endfor %}
+  </table></div>
+</div>
+<div class="card">
+  <h2>Add a plot</h2>
+  <form class="inline" method="post" action="{{ url_for('add_plot') }}">
+    <div class="field"><label>Farmer</label><select name="farmer_id" required>{% for f in farmers %}<option value="{{ f.farmer_id }}">{{ f.full_name }} ({{ f.village }})</option>{% endfor %}</select></div>
+    <div class="field"><label>Plot name</label><input name="plot_name" required maxlength="60"></div>
+    <div class="field"><label>Area (acres)</label><input name="area_acres" type="number" step="0.01" min="0.01" required size="7"></div>
+    <div class="field"><label>Soil type</label><select name="soil_type">{% for s in SOIL_TYPES %}<option>{{ s }}</option>{% endfor %}</select></div>
+    <div class="field"><label>Latitude</label><input name="latitude" type="number" step="0.000001" size="9"></div>
+    <div class="field"><label>Longitude</label><input name="longitude" type="number" step="0.000001" size="9"></div>
+    <button class="btn">Add plot</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{
+  "model": "AdaBoost (trees)",
+  "feature_set": "without_pH",
+  "cv_accuracy": 0.6886363636363637,
+  "cv_accuracy_std": 0.02418079286958252,
+  "cv_f1_macro": 0.6806680600224502,
+  "cv_f1_macro_std": 0.02760065129442377,
+  "cv_top3_accuracy": 0.9163636363636364,
+  "holdout_accuracy": 0.6727272727272727,
+  "holdout_precision_macro": 0.7185247610038652,
+  "holdout_recall_macro": 0.6727272727272728,
+  "holdout_f1_macro": 0.6639170047291059,
+  "holdout_top3_accuracy": 0.9795454545454545,
+  "holdout_log_loss": 3.081219581665403,
+  "fit_seconds": 1.811,
+  "cv_seconds": 2.21,
+  "predict_ms_per_sample": 0.501
+}

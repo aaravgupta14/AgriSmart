@@ -1,0 +1,18 @@
+{
+  "model": "Gaussian Naive Bayes",
+  "feature_set": "with_pH",
+  "cv_accuracy": 0.5950000000000001,
+  "cv_accuracy_std": 0.01616035348602836,
+  "cv_f1_macro": 0.583389662948964,
+  "cv_f1_macro_std": 0.018486537960750137,
+  "cv_top3_accuracy": 0.8304545454545454,
+  "holdout_accuracy": 0.6045454545454545,
+  "holdout_precision_macro": 0.7109542819910616,
+  "holdout_recall_macro": 0.6045454545454544,
+  "holdout_f1_macro": 0.6038925142027488,
+  "holdout_top3_accuracy": 0.9636363636363636,
+  "holdout_log_loss": 4.2684161108564,
+  "fit_seconds": 0.032,
+  "cv_seconds": 3.25,
+  "predict_ms_per_sample": 0.0303
+}

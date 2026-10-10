@@ -1,0 +1,18 @@
+{
+  "model": "SVM (RBF)",
+  "feature_set": "without_pH",
+  "cv_accuracy": 0.8190909090909091,
+  "cv_accuracy_std": 0.0232040891238186,
+  "cv_f1_macro": 0.8157223552225344,
+  "cv_f1_macro_std": 0.024834180375168994,
+  "cv_top3_accuracy": 0.9495454545454546,
+  "holdout_accuracy": 0.825,
+  "holdout_precision_macro": 0.8246539244440435,
+  "holdout_recall_macro": 0.8249999999999997,
+  "holdout_f1_macro": 0.8170996221597651,
+  "holdout_top3_accuracy": 0.9795454545454545,
+  "holdout_log_loss": 0.5258151384997851,
+  "fit_seconds": 0.513,
+  "cv_seconds": 1.15,
+  "predict_ms_per_sample": 0.1823
+}

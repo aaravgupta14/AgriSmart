@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Soil readings{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Soil readings</h1><p>Rows of <span class="mono">soil_health_logs</span> - from sensor nodes (via the serial bridge) or entered manually.</p></div>
+  <form class="inline" method="get"><div class="field"><label>Filter by plot</label><select name="plot_id" onchange="this.form.submit()"><option value="">All plots</option>{% for p in plots %}<option value="{{ p.plot_id }}" {{ 'selected' if p.plot_id == plot_id }}>#{{ p.plot_id }} {{ p.plot_name }}</option>{% endfor %}</select></div></form>
+</div>
+
+<div class="card">
+  <h2>Add a manual reading</h2>
+  <p class="small muted">Use for a handheld kit or a Soil Health Card / lab pH test. Leave unknown values empty.</p>
+  <form class="inline" method="post" action="{{ url_for('add_log') }}">
+    <div class="field"><label>Plot</label><select name="plot_id" required>{% for p in plots %}<option value="{{ p.plot_id }}" {{ 'selected' if p.plot_id == plot_id }}>#{{ p.plot_id }} {{ p.plot_name }}</option>{% endfor %}</select></div>
+    <div class="field"><label>Time (blank = now)</label><input type="datetime-local" name="log_ts"></div>
+    <div class="field"><label>Moisture %</label><input name="moisture_pct" type="number" step="0.1" size="6"></div>
+    <div class="field"><label>Soil °C</label><input name="soil_temp_c" type="number" step="0.1" size="6"></div>
+    <div class="field"><label>Air °C</label><input name="air_temp_c" type="number" step="0.1" size="6"></div>
+    <div class="field"><label>RH %</label><input name="humidity_pct" type="number" step="1" size="5"></div>
+    <div class="field"><label>pH</label><input name="ph_value" type="number" step="0.01" size="5"></div>
+    <div class="field"><label>Note</label><input name="note" maxlength="200" placeholder="e.g. Soil Health Card"></div>
+    <button class="btn">Save</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Latest 300 readings</h2>
+  <div class="table-wrap"><table class="small">
+    <tr><th>Time</th><th>Plot</th><th>Source</th><th class="num">Moist. %</th><th class="num">Soil °C</th><th class="num">Air °C</th><th class="num">RH %</th><th class="num">pH</th><th class="num">Quality</th><th>Note</th></tr>
+    {% for r in rows %}
+    <tr><td class="mono">{{ r.log_ts }}</td><td>{{ r.plot_name }}</td>
+      <td>{% if r.source=='SENSOR' %}<span class="badge b-info">{{ r.node_id }}</span>{% else %}<span class="badge b-mute">manual</span>{% endif %}</td>
+      <td class="num">{{ r.moisture_pct if r.moisture_pct is not none else '' }}</td><td class="num">{{ r.soil_temp_c|num(2) if r.soil_temp_c is not none else ('NULL' if r.source=='SENSOR' else '') }}</td>
+      <td class="num">{{ r.air_temp_c|num(0) if r.air_temp_c is not none else '' }}</td><td class="num">{{ r.humidity_pct|num(0) if r.humidity_pct is not none else '' }}</td>
+      <td class="num">{{ r.ph_value if r.ph_value is not none else '' }}</td>
+      <td class="num">{% if r.quality_score is none %}<span class="muted">-</span>{% elif r.quality_score == 0 %}<span class="badge b-bad">0</span>{% elif r.quality_score < 1 %}<span class="badge b-warn">{{ r.quality_score }}</span>{% else %}1{% endif %}</td>
+      <td class="muted">{{ r.note or '' }}</td></tr>
+    {% endfor %}
+  </table></div>
+</div>
+{% endblock %}

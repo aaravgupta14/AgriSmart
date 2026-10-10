@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}My field{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>{{ p.plot_name }}</h1>
+    <p>{{ p.farmer }}, {{ p.village }} · {{ p.soil_type }} soil · {{ p.area_acres }} acres</p></div>
+  <a class="btn big" href="{{ url_for('advice') }}">What should I grow? →</a>
+</div>
+
+{# ---------- how the data is being collected ---------- #}
+<div class="card source {{ 'live' if online else ('off' if nodes else 'none') }}">
+  {% if online %}
+    <span class="dot"></span>
+    <div><b>Sensor is working.</b> {{ nodes|map(attribute='node_id')|join(', ') }} sends a reading every few minutes
+      · {{ n24 }} readings in the last 24 h · last one {{ ago(nodes[0].last_seen_ts) }}.
+      <div class="small muted">Nothing to do – readings are saved automatically.</div></div>
+  {% elif nodes and not nodes[0].last_seen_ts %}
+    <span class="dot"></span>
+    <div><b>Waiting for the first reading from {{ nodes[0].node_id }}.</b> To connect it:
+      <ol class="setup-steps">
+        <li>In <span class="mono">agrismart_node.ino</span> set <span class="mono">NODE_ID = "{{ nodes[0].node_id }}"</span> and upload it to the Arduino.</li>
+        <li>Plug the Arduino into this computer by USB.</li>
+        <li>Run <span class="mono">.venv\Scripts\python hardware\bridge\serial_bridge.py</span> and keep it open.</li>
+      </ol>
+      <div class="small muted" style="margin-top:6px">No hardware yet? Test with
+        <span class="mono">serial_bridge.py --simulate --node {{ nodes[0].node_id }}</span> – or <a href="{{ url_for('add_data') }}">enter a reading by hand</a>.</div></div>
+  {% elif nodes %}
+    <span class="dot"></span>
+    <div><b>Sensor is not sending data</b> (last seen {{ ago(nodes[0].last_seen_ts) }}).
+      Check that the Arduino is plugged in and the bridge program is running – or
+      <a href="{{ url_for('add_data') }}">enter a reading by hand</a>.</div>
+  {% else %}
+    <span class="dot"></span>
+    <div><b>No sensor on this field.</b> That's fine – <a href="{{ url_for('add_data') }}">enter readings by hand</a>
+      from a soil test kit. One reading a day is enough.</div>
+  {% endif %}
+</div>
+
+{% if nodes %}
+<p class="small muted" style="margin:-8px 0 16px">Sensors on {{ nodes[0].node_id }}: {{ nodes[0].sensor_list|join(' · ') }}</p>
+{% if nodes[0].no_soil_temp %}<div class="flash warn">This node has no soil temperature probe. Crop advice needs soil temperature – <a href="{{ url_for('add_data') }}">enter it by hand</a> from time to time.</div>{% endif %}
+{% endif %}
+
+{# ---------- latest readings ---------- #}
+<h2 class="sec">Latest soil readings
+  <span class="small muted">{% if latest_src %}{{ 'from sensor' if latest_src.source == 'SENSOR' else 'entered by hand' }}, {{ ago(latest_src.log_ts) }}{% else %}none yet{% endif %}</span></h2>
+<div class="grid g5 tiles">
+  <div class="stat"><div class="k">Soil moisture</div><div class="v">{{ p.moisture_pct|num(1) }}<small>%</small></div></div>
+  <div class="stat"><div class="k">Soil temperature</div><div class="v">{{ p.soil_temp_c|num(1) }}<small> °C</small></div></div>
+  <div class="stat"><div class="k">Air temperature</div><div class="v">{{ p.air_temp_c|num(1) }}<small> °C</small></div></div>
+  <div class="stat"><div class="k">Humidity</div><div class="v">{{ p.humidity_pct|num(0) }}<small>%</small></div></div>
+  <div class="stat {{ 'missing' if not ph }}"><div class="k">Soil pH</div>
+    {% if ph %}<div class="v">{{ ph.ph_value|num(2) }}</div><div class="s">tested {{ ago(ph.ph_measured_on) }}</div>
+    {% else %}<div class="v">—</div><div class="s"><a href="{{ url_for('add_data') }}#ph">Add a pH test</a> for better advice</div>{% endif %}</div>
+</div>
+
+<div class="card">
+  <h2>Last 7 days</h2>
+  <div class="chart-box"><canvas id="chart"></canvas></div>
+</div>
+
+{# ---------- current crop ---------- #}
+<div class="card">
+  {% if growing %}
+    {% set days_in = (today - growing.sow_date).days %}
+    <h2>Growing now: {{ crop_name(growing.crop_name) }}</h2>
+    <div class="meter wide"><span style="width: {{ [100, 100 * days_in / growing.catalogue_days]|min|round(0) }}%"></span></div>
+    <p class="small">Day {{ days_in }} of about {{ growing.catalogue_days }} · sown {{ growing.sow_date }}</p>
+    <a href="{{ url_for('my_crops') }}">Add fertiliser or record harvest →</a>
+  {% else %}
+    <h2>Nothing growing on this field</h2>
+    <p class="muted">Get crop advice based on the readings above, then start your next crop from there.</p>
+    <a class="btn" href="{{ url_for('advice') }}">Get crop advice →</a>
+  {% endif %}
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+fetch("{{ url_for('api_plot_readings', plot_id=p.plot_id) }}?days=7").then(r => r.json()).then(rows => {
+  if (!rows.length) { document.getElementById("chart").parentElement.innerHTML = '<p class="muted">No readings yet.</p>'; return; }
+  const lab = rows.map(r => r.log_ts.slice(5, 16));
+  const s = (k) => rows.map(r => r[k]);
+  new Chart(document.getElementById("chart"), {
+    type: "line",
+    data: { labels: lab, datasets: [
+      { label: "Soil moisture %", data: s("moisture_pct"), borderColor: "#2f6b3a", yAxisID: "y", pointRadius: 0, borderWidth: 2 },
+      { label: "Soil temp °C", data: s("soil_temp_c"), borderColor: "#b5652b", yAxisID: "y", pointRadius: 0, borderWidth: 1.5, spanGaps: true },
+      { label: "Air temp °C", data: s("air_temp_c"), borderColor: "#d9a521", yAxisID: "y", pointRadius: 0, borderWidth: 1.2 },
+      { label: "Humidity %", data: s("humidity_pct"), borderColor: "#6f8fb3", yAxisID: "y1", pointRadius: 0, borderWidth: 1.2 },
+    ]},
+    options: { maintainAspectRatio: false, interaction: { mode: "index", intersect: false },
+      plugins: { legend: { labels: { boxWidth: 12, font: { family: "IBM Plex Sans" } } } },
+      scales: { x: { ticks: { maxTicksLimit: 8 } }, y: { title: { display: true, text: "% / °C" } },
+                y1: { position: "right", min: 0, max: 100, grid: { drawOnChartArea: false }, title: { display: true, text: "Humidity %" } } } }
+  });
+});
+</script>
+{% endblock %}

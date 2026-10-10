@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Farmers{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Farmers</h1><p>Members of the cooperative (demo data).</p></div></div>
+<div class="card"><div class="table-wrap"><table>
+  <tr><th>ID</th><th>Name</th><th>Phone</th><th>Village</th><th>Co-op</th><th class="num">Plots</th><th class="num">Acres</th></tr>
+  {% for f in rows %}<tr><td class="mono">{{ f.farmer_id }}</td><td>{{ f.full_name }}</td><td class="mono">{{ f.phone_no }}</td><td>{{ f.village }}</td><td>{{ f.coop_id }}</td><td class="num">{{ f.n_plots }}</td><td class="num">{{ f.acres|num(2) }}</td></tr>{% endfor %}
+</table></div></div>
+<div class="card"><h2>Add a farmer</h2>
+  <form class="inline" method="post">
+    <div class="field"><label>Full name</label><input name="full_name" required maxlength="100"></div>
+    <div class="field"><label>Phone (10 digits)</label><input name="phone_no" required pattern="[6-9][0-9]{9}" maxlength="10"></div>
+    <div class="field"><label>Village</label><input name="village" required></div>
+    <div class="field"><label>Co-op ID</label><input name="coop_id" value="VLR-COOP-01" required></div>
+    <button class="btn">Add</button>
+  </form></div>
+{% endblock %}

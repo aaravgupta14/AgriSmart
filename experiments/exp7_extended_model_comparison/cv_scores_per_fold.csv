@@ -1,0 +1,161 @@
+model,feature_set,fold,accuracy,f1_macro,top3_accuracy
+Logistic Regression,with_pH,1,0.7159,0.7089,0.875
+Logistic Regression,with_pH,2,0.7341,0.728,0.9114
+Logistic Regression,with_pH,3,0.7295,0.7219,0.925
+Logistic Regression,with_pH,4,0.7568,0.7533,0.8909
+Logistic Regression,with_pH,5,0.725,0.7176,0.9136
+Gaussian Naive Bayes,with_pH,1,0.5727,0.5541,0.7977
+Gaussian Naive Bayes,with_pH,2,0.6091,0.6067,0.8432
+Gaussian Naive Bayes,with_pH,3,0.5818,0.5725,0.8341
+Gaussian Naive Bayes,with_pH,4,0.6159,0.5967,0.8409
+Gaussian Naive Bayes,with_pH,5,0.5955,0.5869,0.8364
+K-Nearest Neighbours,with_pH,1,0.7818,0.7708,0.9295
+K-Nearest Neighbours,with_pH,2,0.8159,0.81,0.9341
+K-Nearest Neighbours,with_pH,3,0.8295,0.8243,0.9477
+K-Nearest Neighbours,with_pH,4,0.8341,0.8305,0.9364
+K-Nearest Neighbours,with_pH,5,0.7909,0.785,0.9227
+Decision Tree,with_pH,1,0.8136,0.8123,0.825
+Decision Tree,with_pH,2,0.8227,0.8207,0.8295
+Decision Tree,with_pH,3,0.8386,0.8379,0.8455
+Decision Tree,with_pH,4,0.7977,0.7977,0.8023
+Decision Tree,with_pH,5,0.825,0.8255,0.8364
+SVM (RBF),with_pH,1,0.8636,0.8614,0.9591
+SVM (RBF),with_pH,2,0.8864,0.8848,0.9818
+SVM (RBF),with_pH,3,0.8841,0.8829,0.9795
+SVM (RBF),with_pH,4,0.8773,0.8773,0.9545
+SVM (RBF),with_pH,5,0.85,0.8481,0.9636
+Random Forest,with_pH,1,0.8773,0.8758,0.9682
+Random Forest,with_pH,2,0.8795,0.8792,0.9773
+Random Forest,with_pH,3,0.8886,0.8878,0.9636
+Random Forest,with_pH,4,0.8818,0.8815,0.9614
+Random Forest,with_pH,5,0.8636,0.8629,0.9773
+Extra Trees,with_pH,1,0.8795,0.8783,0.9591
+Extra Trees,with_pH,2,0.8568,0.856,0.9727
+Extra Trees,with_pH,3,0.8841,0.8832,0.9705
+Extra Trees,with_pH,4,0.8727,0.8723,0.9636
+Extra Trees,with_pH,5,0.8568,0.8561,0.9568
+Hist Gradient Boosting,with_pH,1,0.8932,0.8918,0.975
+Hist Gradient Boosting,with_pH,2,0.8727,0.8729,0.975
+Hist Gradient Boosting,with_pH,3,0.9,0.9002,0.9886
+Hist Gradient Boosting,with_pH,4,0.8932,0.8935,0.9659
+Hist Gradient Boosting,with_pH,5,0.8818,0.8813,0.9795
+MLP Neural Network,with_pH,1,0.7977,0.7888,0.9341
+MLP Neural Network,with_pH,2,0.8455,0.8443,0.9682
+MLP Neural Network,with_pH,3,0.8432,0.8414,0.9568
+MLP Neural Network,with_pH,4,0.8432,0.8421,0.9682
+MLP Neural Network,with_pH,5,0.8136,0.8128,0.9409
+Linear Discriminant Analysis,with_pH,1,0.7432,0.7361,0.8909
+Linear Discriminant Analysis,with_pH,2,0.7477,0.7461,0.9068
+Linear Discriminant Analysis,with_pH,3,0.7455,0.7389,0.9114
+Linear Discriminant Analysis,with_pH,4,0.7136,0.7106,0.8886
+Linear Discriminant Analysis,with_pH,5,0.6909,0.6938,0.8886
+Quadratic Discriminant Analysis,with_pH,1,0.7523,0.7396,0.9068
+Quadratic Discriminant Analysis,with_pH,2,0.7614,0.7477,0.925
+Quadratic Discriminant Analysis,with_pH,3,0.7795,0.7749,0.9295
+Quadratic Discriminant Analysis,with_pH,4,0.7841,0.7773,0.9386
+Quadratic Discriminant Analysis,with_pH,5,0.7591,0.7516,0.9273
+AdaBoost (trees),with_pH,1,0.7682,0.7538,0.9364
+AdaBoost (trees),with_pH,2,0.7659,0.7617,0.9523
+AdaBoost (trees),with_pH,3,0.8023,0.7961,0.95
+AdaBoost (trees),with_pH,4,0.7659,0.7633,0.9545
+AdaBoost (trees),with_pH,5,0.7409,0.7409,0.9455
+Bagging (trees),with_pH,1,0.8886,0.8876,0.9636
+Bagging (trees),with_pH,2,0.8636,0.8634,0.9682
+Bagging (trees),with_pH,3,0.8955,0.8952,0.9591
+Bagging (trees),with_pH,4,0.8636,0.8639,0.9477
+Bagging (trees),with_pH,5,0.8386,0.8382,0.95
+Gradient Boosting (classic),with_pH,1,0.85,0.8492,0.9455
+Gradient Boosting (classic),with_pH,2,0.8545,0.8539,0.975
+Gradient Boosting (classic),with_pH,3,0.8841,0.8856,0.9795
+Gradient Boosting (classic),with_pH,4,0.8523,0.8525,0.9568
+Gradient Boosting (classic),with_pH,5,0.8591,0.8587,0.9591
+Soft Voting (RF+HGB+SVM),with_pH,1,0.8955,0.894,0.975
+Soft Voting (RF+HGB+SVM),with_pH,2,0.8886,0.8879,0.9773
+Soft Voting (RF+HGB+SVM),with_pH,3,0.8977,0.8979,0.9795
+Soft Voting (RF+HGB+SVM),with_pH,4,0.9045,0.905,0.9682
+Soft Voting (RF+HGB+SVM),with_pH,5,0.8886,0.8875,0.9773
+Stacking (RF+HGB+KNN -> LR),with_pH,1,0.8955,0.8942,0.9659
+Stacking (RF+HGB+KNN -> LR),with_pH,2,0.8886,0.8889,0.9727
+Stacking (RF+HGB+KNN -> LR),with_pH,3,0.9,0.9001,0.9614
+Stacking (RF+HGB+KNN -> LR),with_pH,4,0.8932,0.8936,0.9614
+Stacking (RF+HGB+KNN -> LR),with_pH,5,0.8841,0.8836,0.9773
+Logistic Regression,without_pH,1,0.65,0.6353,0.8614
+Logistic Regression,without_pH,2,0.6614,0.6506,0.8591
+Logistic Regression,without_pH,3,0.6795,0.6658,0.875
+Logistic Regression,without_pH,4,0.7068,0.6945,0.8909
+Logistic Regression,without_pH,5,0.6591,0.645,0.85
+Gaussian Naive Bayes,without_pH,1,0.5205,0.4892,0.7591
+Gaussian Naive Bayes,without_pH,2,0.5455,0.5388,0.7955
+Gaussian Naive Bayes,without_pH,3,0.5409,0.5225,0.7886
+Gaussian Naive Bayes,without_pH,4,0.5727,0.5501,0.7977
+Gaussian Naive Bayes,without_pH,5,0.55,0.5326,0.7909
+K-Nearest Neighbours,without_pH,1,0.7523,0.747,0.9136
+K-Nearest Neighbours,without_pH,2,0.775,0.7699,0.9364
+K-Nearest Neighbours,without_pH,3,0.8273,0.8234,0.9364
+K-Nearest Neighbours,without_pH,4,0.825,0.8237,0.9364
+K-Nearest Neighbours,without_pH,5,0.7932,0.7897,0.9273
+Decision Tree,without_pH,1,0.7591,0.7581,0.7727
+Decision Tree,without_pH,2,0.7682,0.7668,0.7705
+Decision Tree,without_pH,3,0.775,0.7744,0.7864
+Decision Tree,without_pH,4,0.7795,0.7801,0.7864
+Decision Tree,without_pH,5,0.7773,0.7754,0.7977
+SVM (RBF),without_pH,1,0.7977,0.7944,0.9409
+SVM (RBF),without_pH,2,0.7955,0.7878,0.9455
+SVM (RBF),without_pH,3,0.8523,0.8499,0.9591
+SVM (RBF),without_pH,4,0.8409,0.8401,0.9545
+SVM (RBF),without_pH,5,0.8091,0.8064,0.9477
+Random Forest,without_pH,1,0.8159,0.8129,0.9455
+Random Forest,without_pH,2,0.8,0.7984,0.9455
+Random Forest,without_pH,3,0.8386,0.8362,0.9636
+Random Forest,without_pH,4,0.8636,0.8632,0.9591
+Random Forest,without_pH,5,0.8386,0.8361,0.9614
+Extra Trees,without_pH,1,0.8068,0.8051,0.9295
+Extra Trees,without_pH,2,0.7727,0.7697,0.9455
+Extra Trees,without_pH,3,0.8295,0.827,0.9545
+Extra Trees,without_pH,4,0.8432,0.8424,0.9659
+Extra Trees,without_pH,5,0.8318,0.8308,0.9364
+Hist Gradient Boosting,without_pH,1,0.8159,0.8146,0.9477
+Hist Gradient Boosting,without_pH,2,0.7795,0.7796,0.9432
+Hist Gradient Boosting,without_pH,3,0.8455,0.8454,0.9523
+Hist Gradient Boosting,without_pH,4,0.8364,0.8366,0.9545
+Hist Gradient Boosting,without_pH,5,0.8114,0.8106,0.95
+MLP Neural Network,without_pH,1,0.7886,0.7813,0.925
+MLP Neural Network,without_pH,2,0.7636,0.7549,0.9318
+MLP Neural Network,without_pH,3,0.7636,0.7557,0.9386
+MLP Neural Network,without_pH,4,0.8205,0.8196,0.9568
+MLP Neural Network,without_pH,5,0.7545,0.7494,0.9318
+Linear Discriminant Analysis,without_pH,1,0.6886,0.6714,0.8795
+Linear Discriminant Analysis,without_pH,2,0.6818,0.6766,0.8773
+Linear Discriminant Analysis,without_pH,3,0.6705,0.6618,0.8841
+Linear Discriminant Analysis,without_pH,4,0.6659,0.6601,0.8636
+Linear Discriminant Analysis,without_pH,5,0.6318,0.6257,0.8545
+Quadratic Discriminant Analysis,without_pH,1,0.6523,0.6341,0.875
+Quadratic Discriminant Analysis,without_pH,2,0.6636,0.6335,0.8727
+Quadratic Discriminant Analysis,without_pH,3,0.7068,0.698,0.9068
+Quadratic Discriminant Analysis,without_pH,4,0.6795,0.6665,0.9091
+Quadratic Discriminant Analysis,without_pH,5,0.7114,0.7006,0.8909
+AdaBoost (trees),without_pH,1,0.6886,0.6854,0.9227
+AdaBoost (trees),without_pH,2,0.675,0.6702,0.8932
+AdaBoost (trees),without_pH,3,0.6636,0.6467,0.9273
+AdaBoost (trees),without_pH,4,0.7341,0.73,0.9386
+AdaBoost (trees),without_pH,5,0.6818,0.6711,0.9
+Bagging (trees),without_pH,1,0.8091,0.806,0.9477
+Bagging (trees),without_pH,2,0.8136,0.8098,0.9409
+Bagging (trees),without_pH,3,0.8386,0.8377,0.9477
+Bagging (trees),without_pH,4,0.8318,0.8312,0.9386
+Bagging (trees),without_pH,5,0.8114,0.8098,0.9432
+Gradient Boosting (classic),without_pH,1,0.8045,0.8036,0.9364
+Gradient Boosting (classic),without_pH,2,0.7795,0.7768,0.9364
+Gradient Boosting (classic),without_pH,3,0.8205,0.8209,0.9477
+Gradient Boosting (classic),without_pH,4,0.8273,0.8273,0.9636
+Gradient Boosting (classic),without_pH,5,0.7909,0.791,0.95
+Soft Voting (RF+HGB+SVM),without_pH,1,0.8295,0.8278,0.9568
+Soft Voting (RF+HGB+SVM),without_pH,2,0.7886,0.7881,0.9477
+Soft Voting (RF+HGB+SVM),without_pH,3,0.8614,0.8611,0.9659
+Soft Voting (RF+HGB+SVM),without_pH,4,0.8568,0.8574,0.9591
+Soft Voting (RF+HGB+SVM),without_pH,5,0.8295,0.8294,0.9591
+Stacking (RF+HGB+KNN -> LR),without_pH,1,0.8273,0.8263,0.9455
+Stacking (RF+HGB+KNN -> LR),without_pH,2,0.7886,0.7884,0.9409
+Stacking (RF+HGB+KNN -> LR),without_pH,3,0.8568,0.8568,0.9409
+Stacking (RF+HGB+KNN -> LR),without_pH,4,0.8636,0.8641,0.9432
+Stacking (RF+HGB+KNN -> LR),without_pH,5,0.8341,0.8329,0.9432

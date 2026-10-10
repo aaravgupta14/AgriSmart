@@ -1,0 +1,19 @@
+# secrets / local configuration
+.env
+.vscode/
+CLAUDE.md
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# local Windows run helpers and their logs (machine-specific)
+run/
+
+# trained models are large (~75 MB) and fully reproducible: python ml/train_models.py
+ml/models/*.joblib
+
+# stale copy of the SQL scripts (database/ is the current version)
+data/database/

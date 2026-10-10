@@ -1,0 +1,18 @@
+{
+  "model": "Stacking (RF+HGB+KNN -> LR)",
+  "feature_set": "without_pH",
+  "cv_accuracy": 0.8340909090909092,
+  "cv_accuracy_std": 0.026465321141835686,
+  "cv_f1_macro": 0.8337034923989226,
+  "cv_f1_macro_std": 0.02670513073720418,
+  "cv_top3_accuracy": 0.9427272727272727,
+  "holdout_accuracy": 0.8136363636363636,
+  "holdout_precision_macro": 0.8183721255962716,
+  "holdout_recall_macro": 0.8136363636363636,
+  "holdout_f1_macro": 0.8117404309370939,
+  "holdout_top3_accuracy": 0.9772727272727273,
+  "holdout_log_loss": 0.5818386160266577,
+  "fit_seconds": 55.331,
+  "cv_seconds": 45.6,
+  "predict_ms_per_sample": 0.6576
+}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Cultivation cycles{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Cultivation cycles</h1><p>Sowing → treatments → harvest. Rotation is enforced by the <span class="mono">trg_cycle_rotation_check</span> trigger.</p></div></div>
+
+<div class="card">
+  <h2>Start a cycle</h2>
+  <form class="inline" method="post" action="{{ url_for('start_cycle') }}">
+    <div class="field"><label>Plot</label><select name="plot_id">{% for p in plots %}<option value="{{ p.plot_id }}">#{{ p.plot_id }} {{ p.plot_name }}</option>{% endfor %}</select></div>
+    <div class="field"><label>Crop</label><select name="crop_name">{% for c in crops %}<option value="{{ c.crop_name }}">{{ c.crop_name }} ({{ c.season }})</option>{% endfor %}</select></div>
+    <div class="field"><label>Sowing date</label><input type="date" name="sow_date" required></div>
+    <button class="btn">Start (calls sp_start_cycle)</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>All cycles</h2>
+  <div class="table-wrap"><table class="small">
+    <tr><th>#</th><th>Plot</th><th>Farmer</th><th>Crop</th><th>Sown</th><th>Harvested</th><th>Status</th><th class="num">Days (cat.)</th><th class="num">Yield kg</th><th class="num">kg/acre</th><th class="num">Eff.</th><th class="num">N kg</th><th class="num">₹ / kg</th><th>Actions</th></tr>
+    {% for c in rows %}
+    <tr><td class="mono">{{ c.cycle_id }}</td><td><a href="{{ url_for('plot_detail', plot_id=c.plot_id) }}">{{ c.plot_name }}</a></td><td>{{ c.farmer }}</td>
+      <td style="text-transform:capitalize">{{ c.crop_name }}</td><td>{{ c.sow_date }}</td><td>{{ c.harvest_date or '-' }}</td>
+      <td><span class="badge {{ 'b-ok' if c.status=='GROWING' else ('b-bad' if c.status=='FAILED' else 'b-mute') }}">{{ c.status|lower }}</span></td>
+      <td class="num">{{ c.actual_days or '-' }} ({{ c.catalogue_days }})</td>
+      <td class="num">{{ c.yield_kg|num(0) if c.yield_kg is not none else '-' }}</td><td class="num">{{ c.yield_kg_per_acre|num(0) if c.yield_kg_per_acre is not none else '-' }}</td>
+      <td class="num">{{ (c.yield_efficiency_pct|string + '%') if c.yield_efficiency_pct is not none else '-' }}</td>
+      <td class="num">{{ c.n_applied_kg|num(1) }}</td><td class="num">{{ c.input_cost_per_kg_yield if c.input_cost_per_kg_yield is not none else '-' }}</td>
+      <td>
+        <details><summary class="small">edit</summary>
+          {% if c.status == 'GROWING' %}
+          <form class="inline" method="post" action="{{ url_for('harvest', cycle_id=c.cycle_id) }}" style="margin:6px 0">
+            <input type="date" name="harvest_date" required><input type="number" step="0.1" min="0" name="yield_kg" placeholder="yield kg" required style="width:90px"><button class="btn small">Harvest</button></form>{% endif %}
+          <form class="inline" method="post" action="{{ url_for('add_treatment', cycle_id=c.cycle_id) }}" style="margin:6px 0">
+            <input type="date" name="applied_on" required>
+            <select name="category"><option>FERTILISER</option><option>MANURE</option><option>PESTICIDE</option><option>FUNGICIDE</option><option>HERBICIDE</option></select>
+            <input name="product_name" placeholder="product" required style="width:120px"><input name="qty_kg" type="number" step="0.1" min="0.1" placeholder="qty kg" required style="width:80px">
+            <input name="n_kg" type="number" step="0.1" min="0" placeholder="N kg" style="width:70px"><input name="cost_inr" type="number" step="1" min="0" placeholder="₹" style="width:80px">
+            <button class="btn small ghost">Add treatment</button></form>
+        </details>
+      </td></tr>
+    {% endfor %}
+  </table></div>
+</div>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}{{ p.plot_name }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>#{{ p.plot_id }} {{ p.plot_name }}</h1>
+    <p>{{ p.farmer }}, {{ p.village }} · {{ p.soil_type }} soil · {{ p.area_acres }} acres · nodes: {{ p.nodes or 'none (manual readings)' }}</p></div>
+  <a class="btn" href="{{ url_for('recommend', plot_id=p.plot_id) }}">Recommend a crop →</a>
+</div>
+
+<div class="grid g4" style="margin-bottom:18px">
+  <div class="stat"><div class="k">Moisture</div><div class="v">{{ p.moisture_pct|num(1) }}<small>%</small></div><div class="s">latest reading</div></div>
+  <div class="stat"><div class="k">Soil / air temp</div><div class="v">{{ p.soil_temp_c|num(1) }}<small> / {{ p.air_temp_c|num(0) }} °C</small></div><div class="s">DS18B20 / DHT11</div></div>
+  <div class="stat"><div class="k">pH</div><div class="v">{{ p.latest_ph|num(2) if p.latest_ph else '—' }}</div><div class="s">{{ 'manual / probe' if p.latest_ph else 'no test in 180 days' }}</div></div>
+  <div class="stat"><div class="k">Virtual N index</div><div class="v">{{ vnbi|num(2) }}</div><div class="s">{{ 'likely N-depleted' if vnbi < -0.75 else ('likely N-rich' if vnbi > 0.75 else 'balanced') }} (fn_virtual_n_index)</div></div>
+</div>
+
+<div class="card">
+  <h2>Last 7 days of readings</h2>
+  <div class="chart-box"><canvas id="chart"></canvas></div>
+  <p class="small muted">Readings with soil temperature missing were sensor faults cleaned by the database trigger.</p>
+</div>
+
+<div class="grid g2">
+  <div class="card">
+    <h2>SQL rule-based suggestion <span class="small muted">(view v_recommended_crops)</span></h2>
+    <table><tr><th>Crop</th><th class="num">Conditions met</th><th class="num">Match</th></tr>
+      {% for r in rule %}<tr><td style="text-transform:capitalize">{{ r.crop_name }}</td><td class="num">{{ r.conditions_met }}/{{ r.conditions_checked }}</td><td class="num">{{ r.match_pct }}%</td></tr>{% endfor %}
+    </table>
+    <p class="small muted">Explainable baseline computed entirely in MySQL. The ML recommender is the primary engine.</p>
+  </div>
+  <div class="card">
+    <h2>Recommendation history</h2>
+    {% if runs %}<table><tr><th>Run</th><th>When</th><th>Top crop</th><th>Model</th><th>Status</th></tr>
+      {% for r in runs %}<tr><td class="mono">{{ r.run_id }}</td><td class="small">{{ r.created_at }}</td><td style="text-transform:capitalize">{{ r.crop_name }}</td><td class="small">{{ r.model_used }}</td><td>{% include "_status_badge.html" %}</td></tr>{% endfor %}
+    </table>{% else %}<p class="muted">None saved yet.</p>{% endif %}
+  </div>
+</div>
+
+<div class="card">
+  <h2>Cultivation history</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Cycle</th><th>Crop</th><th>Sown</th><th>Harvested</th><th>Status</th><th class="num">Yield kg</th><th class="num">kg/acre</th><th class="num">Efficiency</th><th class="num">N applied kg</th><th class="num">Input ₹</th><th></th></tr>
+    {% for c in cycles %}
+    <tr><td class="mono">{{ c.cycle_id }}</td><td style="text-transform:capitalize">{{ c.crop_name }}</td><td>{{ c.sow_date }}</td><td>{{ c.harvest_date or '-' }}</td>
+      <td><span class="badge {{ 'b-ok' if c.status=='GROWING' else ('b-bad' if c.status=='FAILED' else 'b-mute') }}">{{ c.status|lower }}</span></td>
+      <td class="num">{{ c.yield_kg|num(0) if c.yield_kg is not none else '-' }}</td><td class="num">{{ c.yield_kg_per_acre|num(0) if c.yield_kg_per_acre is not none else '-' }}</td>
+      <td class="num">{{ (c.yield_efficiency_pct|string + '%') if c.yield_efficiency_pct is not none else '-' }}</td>
+      <td class="num">{{ c.n_applied_kg|num(1) }}</td><td class="num">{{ c.input_cost_inr|num(0) }}</td>
+      <td>{% if c.status == 'GROWING' %}
+        <form class="inline" method="post" action="{{ url_for('harvest', cycle_id=c.cycle_id) }}">
+          <input type="date" name="harvest_date" required><input type="number" step="0.1" min="0" name="yield_kg" placeholder="yield kg" required style="width:100px">
+          <button class="btn small">Harvest</button></form>{% endif %}</td></tr>
+    {% endfor %}
+  </table></div>
+  <h3 style="margin-top:16px">Start a new cycle</h3>
+  <form class="inline" method="post" action="{{ url_for('start_cycle') }}">
+    <input type="hidden" name="plot_id" value="{{ p.plot_id }}">
+    <div class="field"><label>Crop</label><select name="crop_name">{% for c in crops %}<option>{{ c.crop_name }}</option>{% endfor %}</select></div>
+    <div class="field"><label>Sowing date</label><input type="date" name="sow_date" required></div>
+    <button class="btn">Start</button>
+  </form>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+fetch("{{ url_for('api_plot_readings', plot_id=p.plot_id) }}?days=7").then(r => r.json()).then(rows => {
+  const lab = rows.map(r => r.log_ts.slice(5, 16));
+  const s = (k) => rows.map(r => r[k]);
+  new Chart(document.getElementById("chart"), {
+    type: "line",
+    data: { labels: lab, datasets: [
+      { label: "Soil moisture %", data: s("moisture_pct"), borderColor: "#2f6b3a", yAxisID: "y", pointRadius: 0, borderWidth: 2 },
+      { label: "Soil temp °C", data: s("soil_temp_c"), borderColor: "#b5652b", yAxisID: "y", pointRadius: 0, borderWidth: 1.5, spanGaps: true },
+      { label: "Air temp °C", data: s("air_temp_c"), borderColor: "#d9a521", yAxisID: "y", pointRadius: 0, borderWidth: 1.2 },
+      { label: "Humidity %", data: s("humidity_pct"), borderColor: "#6f8fb3", yAxisID: "y1", pointRadius: 0, borderWidth: 1.2 },
+    ]},
+    options: { maintainAspectRatio: false, interaction: { mode: "index", intersect: false },
+      plugins: { legend: { labels: { boxWidth: 12, font: { family: "IBM Plex Sans" } } } },
+      scales: { x: { ticks: { maxTicksLimit: 8 } }, y: { title: { display: true, text: "% / °C" } },
+                y1: { position: "right", min: 0, max: 100, grid: { drawOnChartArea: false }, title: { display: true, text: "RH %" } } } }
+  });
+});
+</script>
+{% endblock %}

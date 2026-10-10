@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}AgriSmart{% endblock %} · AgriSmart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="shell">
+  <aside class="side">
+    <div class="brand">
+      <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 29V14" stroke="#8aa36b" stroke-width="2.5" stroke-linecap="round"/><path d="M16 15c0-6 4-10 11-10 0 7-4 11-11 10z" fill="#8aa36b"/><path d="M16 19c0-5-3-8-9-8 0 5 3 8 9 8z" fill="#c9d8b4"/><path d="M5 29h22" stroke="#b5652b" stroke-width="2.5" stroke-linecap="round"/></svg>
+      AgriSmart
+    </div>
+    <p class="tag">What should I grow on my field?</p>
+    {% set ep = request.endpoint %}
+    {% set admin_eps = ('dashboard','plots','plot_detail','recommend','logs','cycles','reports','farmers','crops','model_page') %}
+
+    {% if all_fields %}
+    <form class="field-switch" onsubmit="return false">
+      <label for="fieldSel">My field</label>
+      <select id="fieldSel" onchange="location.href='/field/' + this.value + '?next=' + encodeURIComponent(location.pathname)">
+        {% for f in all_fields %}<option value="{{ f.plot_id }}" {{ 'selected' if f.plot_id == current_field }}>{{ f.plot_name }} · {{ f.farmer }}</option>{% endfor %}
+      </select>
+    </form>
+    {% endif %}
+
+    <nav class="nav steps">
+      <a href="{{ url_for('home') }}" class="{{ 'on' if ep=='home' }}"><span class="step">1</span>My field</a>
+      <a href="{{ url_for('add_data') }}" class="{{ 'on' if ep=='add_data' }}"><span class="step">2</span>Add soil data <small>optional</small></a>
+      <a href="{{ url_for('advice') }}" class="{{ 'on' if ep=='advice' }}"><span class="step">3</span>Crop advice</a>
+      <a href="{{ url_for('my_crops') }}" class="{{ 'on' if ep=='my_crops' }}"><span class="step">4</span>My crops &amp; harvest</a>
+      <a href="{{ url_for('register') }}" class="new {{ 'on' if ep=='register' }}">+ New account / field</a>
+    </nav>
+
+    <details class="admin" {{ 'open' if ep in admin_eps }}>
+      <summary>Admin &amp; project pages</summary>
+      <nav class="nav">
+        <a href="{{ url_for('dashboard') }}" class="{{ 'on' if ep=='dashboard' }}">Overview</a>
+        <a href="{{ url_for('farmers') }}" class="{{ 'on' if ep=='farmers' }}">Farmers</a>
+        <a href="{{ url_for('plots') }}" class="{{ 'on' if ep in ('plots','plot_detail') }}">Fields &amp; sensors</a>
+        <a href="{{ url_for('logs') }}" class="{{ 'on' if ep=='logs' }}">All soil readings</a>
+        <a href="{{ url_for('cycles') }}" class="{{ 'on' if ep=='cycles' }}">All cultivation cycles</a>
+        <a href="{{ url_for('reports') }}" class="{{ 'on' if ep=='reports' }}">Yield reports</a>
+        <a href="{{ url_for('recommend') }}" class="{{ 'on' if ep=='recommend' }}">Technical recommendation</a>
+        <a href="{{ url_for('crops') }}" class="{{ 'on' if ep=='crops' }}">Crop catalogue</a>
+        <a href="{{ url_for('model_page') }}" class="{{ 'on' if ep=='model_page' }}">Model &amp; experiments</a>
+      </nav>
+    </details>
+    <div class="side-foot">BCSE302L/P DBMS project · VIT<br>MySQL · Flask · scikit-learn</div>
+  </aside>
+  <main>
+    {% with msgs = get_flashed_messages(with_categories=true) %}
+      {% for cat, m in msgs %}<div class="flash {{ cat }}">{{ m }}</div>{% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+{% block scripts %}{% endblock %}
+</body>
+</html>

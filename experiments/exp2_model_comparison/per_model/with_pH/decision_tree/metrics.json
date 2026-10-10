@@ -1,0 +1,18 @@
+{
+  "model": "Decision Tree",
+  "feature_set": "with_pH",
+  "cv_accuracy": 0.8195454545454546,
+  "cv_accuracy_std": 0.013529887332852012,
+  "cv_f1_macro": 0.8188129378231082,
+  "cv_f1_macro_std": 0.01342522999574847,
+  "cv_top3_accuracy": 0.8277272727272728,
+  "holdout_accuracy": 0.7931818181818182,
+  "holdout_precision_macro": 0.7892641437557398,
+  "holdout_recall_macro": 0.7931818181818183,
+  "holdout_f1_macro": 0.785606088167489,
+  "holdout_top3_accuracy": 0.8068181818181818,
+  "holdout_log_loss": 7.454482860021956,
+  "fit_seconds": 0.044,
+  "cv_seconds": 3.96,
+  "predict_ms_per_sample": 0.0337
+}

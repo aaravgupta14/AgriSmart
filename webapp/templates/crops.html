@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Crop catalogue{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Crop catalogue</h1><p>Agronomic attributes + suitability envelopes learned from the training data (P5–P95).</p></div></div>
+<div class="card"><div class="table-wrap"><table class="small">
+  <tr><th>Crop</th><th>Season</th><th>Family</th><th>N-demand</th><th class="num">Days</th><th class="num">Exp. kg/acre</th><th class="num">pH</th><th class="num">Moisture %</th><th class="num">Soil °C</th><th class="num">Air °C</th><th class="num">RH %</th></tr>
+  {% for c in rows %}<tr><td style="text-transform:capitalize"><b>{{ c.crop_name }}</b>{% if c.is_perennial %} <span class="badge b-mute">perennial</span>{% endif %}</td><td>{{ c.season }}</td><td>{{ c.family }}</td>
+    <td><span class="badge {{ 'b-ok' if c.n_demand=='FIXER' else ('b-warn' if c.n_demand=='HIGH' else 'b-mute') }}">{{ c.n_demand|lower }}</span></td>
+    <td class="num">{{ c.maturation_days }}</td><td class="num">{{ c.expected_yield_kg_acre|num(0) }}</td>
+    <td class="num">{{ c.ph_min }}–{{ c.ph_max }}</td><td class="num">{{ c.moisture_min|num(1) }}–{{ c.moisture_max|num(1) }}</td>
+    <td class="num">{{ c.soil_temp_min|num(1) }}–{{ c.soil_temp_max|num(1) }}</td><td class="num">{{ c.air_temp_min|num(0) }}–{{ c.air_temp_max|num(0) }}</td><td class="num">{{ c.humidity_min|num(0) }}–{{ c.humidity_max|num(0) }}</td></tr>{% endfor %}
+</table></div></div>
+{% endblock %}

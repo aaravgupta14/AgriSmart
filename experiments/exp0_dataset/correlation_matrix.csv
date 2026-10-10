@@ -1,0 +1,6 @@
+,moisture_pct,soil_temp_c,air_temp_c,humidity_pct,ph
+moisture_pct,1.0,-0.221,-0.122,-0.06,0.033
+soil_temp_c,-0.221,1.0,0.981,0.209,-0.021
+air_temp_c,-0.122,0.981,1.0,0.206,-0.019
+humidity_pct,-0.06,0.209,0.206,1.0,-0.008
+ph,0.033,-0.021,-0.019,-0.008,1.0

@@ -1,0 +1,652 @@
+{
+  "trained_on": "data\\processed\\agrismart_sensor_dataset.csv",
+  "n_rows": 2200,
+  "classes": [
+    "apple",
+    "banana",
+    "blackgram",
+    "chickpea",
+    "coconut",
+    "coffee",
+    "cotton",
+    "grapes",
+    "jute",
+    "kidneybeans",
+    "lentil",
+    "maize",
+    "mango",
+    "mothbeans",
+    "mungbean",
+    "muskmelon",
+    "orange",
+    "papaya",
+    "pigeonpeas",
+    "pomegranate",
+    "rice",
+    "watermelon"
+  ],
+  "seed": 42,
+  "models": {
+    "with_pH": {
+      "algorithm": "Soft Voting (RF+HGB+SVM)",
+      "features": [
+        "moisture_pct",
+        "soil_temp_c",
+        "air_temp_c",
+        "humidity_pct",
+        "ph",
+        "soil_type"
+      ],
+      "cv_accuracy": 0.8949999999999999,
+      "cv_f1_macro": 0.8944721566339459,
+      "cv_top3_accuracy": 0.9754545454545454,
+      "holdout_accuracy": 0.8931818181818182,
+      "holdout_f1_macro": 0.8924412900898144,
+      "holdout_top3_accuracy": 0.9977272727272727
+    },
+    "without_pH": {
+      "algorithm": "Random Forest",
+      "features": [
+        "moisture_pct",
+        "soil_temp_c",
+        "air_temp_c",
+        "humidity_pct",
+        "soil_type"
+      ],
+      "cv_accuracy": 0.8313636363636364,
+      "cv_f1_macro": 0.8293716603526573,
+      "cv_top3_accuracy": 0.9549999999999998,
+      "holdout_accuracy": 0.8045454545454546,
+      "holdout_f1_macro": 0.7998717189343129,
+      "holdout_top3_accuracy": 0.9818181818181818
+    }
+  },
+  "envelopes": {
+    "apple": {
+      "moisture_pct": [
+        13.49,
+        22.21
+      ],
+      "soil_temp_c": [
+        22.37,
+        26.38
+      ],
+      "air_temp_c": [
+        21.0,
+        24.0
+      ],
+      "humidity_pct": [
+        90.0,
+        95.0
+      ],
+      "ph": [
+        5.56,
+        6.4
+      ],
+      "soil_types": {
+        "Laterite": 0.4,
+        "Alluvial": 0.34,
+        "Red": 0.26
+      }
+    },
+    "banana": {
+      "moisture_pct": [
+        18.29,
+        30.9
+      ],
+      "soil_temp_c": [
+        25.93,
+        31.5
+      ],
+      "air_temp_c": [
+        25.0,
+        29.0
+      ],
+      "humidity_pct": [
+        76.0,
+        85.0
+      ],
+      "ph": [
+        5.57,
+        6.44
+      ],
+      "soil_types": {
+        "Alluvial": 0.63,
+        "Black": 0.19,
+        "Laterite": 0.18
+      }
+    },
+    "blackgram": {
+      "moisture_pct": [
+        12.16,
+        29.42
+      ],
+      "soil_temp_c": [
+        26.85,
+        36.51
+      ],
+      "air_temp_c": [
+        26.0,
+        34.0
+      ],
+      "humidity_pct": [
+        60.0,
+        69.0
+      ],
+      "ph": [
+        6.54,
+        7.71
+      ],
+      "soil_types": {
+        "Black": 0.49,
+        "Alluvial": 0.36,
+        "Red": 0.15
+      }
+    },
+    "chickpea": {
+      "moisture_pct": [
+        12.48,
+        31.11
+      ],
+      "soil_temp_c": [
+        17.75,
+        22.57
+      ],
+      "air_temp_c": [
+        17.0,
+        21.0
+      ],
+      "humidity_pct": [
+        14.0,
+        20.0
+      ],
+      "ph": [
+        6.18,
+        8.74
+      ],
+      "soil_types": {
+        "Black": 0.54,
+        "Alluvial": 0.35,
+        "Red": 0.11
+      }
+    },
+    "coconut": {
+      "moisture_pct": [
+        9.29,
+        24.62
+      ],
+      "soil_temp_c": [
+        26.36,
+        31.94
+      ],
+      "air_temp_c": [
+        25.0,
+        30.0
+      ],
+      "humidity_pct": [
+        91.0,
+        100.0
+      ],
+      "ph": [
+        5.55,
+        6.42
+      ],
+      "soil_types": {
+        "Laterite": 0.44,
+        "Sandy": 0.35,
+        "Alluvial": 0.21
+      }
+    },
+    "coffee": {
+      "moisture_pct": [
+        13.99,
+        22.93
+      ],
+      "soil_temp_c": [
+        24.56,
+        29.82
+      ],
+      "air_temp_c": [
+        23.0,
+        28.0
+      ],
+      "humidity_pct": [
+        51.0,
+        68.0
+      ],
+      "ph": [
+        6.08,
+        7.46
+      ],
+      "soil_types": {
+        "Laterite": 0.57,
+        "Red": 0.43
+      }
+    },
+    "cotton": {
+      "moisture_pct": [
+        14.94,
+        30.52
+      ],
+      "soil_temp_c": [
+        22.19,
+        27.51
+      ],
+      "air_temp_c": [
+        22.0,
+        26.0
+      ],
+      "humidity_pct": [
+        76.0,
+        85.0
+      ],
+      "ph": [
+        6.01,
+        7.95
+      ],
+      "soil_types": {
+        "Black": 0.67,
+        "Alluvial": 0.27,
+        "Red": 0.06
+      }
+    },
+    "grapes": {
+      "moisture_pct": [
+        7.3,
+        29.7
+      ],
+      "soil_temp_c": [
+        11.88,
+        42.02
+      ],
+      "air_temp_c": [
+        10.0,
+        41.0
+      ],
+      "humidity_pct": [
+        80.0,
+        84.0
+      ],
+      "ph": [
+        5.56,
+        6.48
+      ],
+      "soil_types": {
+        "Black": 0.47,
+        "Red": 0.3,
+        "Sandy": 0.23
+      }
+    },
+    "jute": {
+      "moisture_pct": [
+        21.39,
+        26.0
+      ],
+      "soil_temp_c": [
+        24.19,
+        28.51
+      ],
+      "air_temp_c": [
+        23.0,
+        27.0
+      ],
+      "humidity_pct": [
+        71.0,
+        88.05
+      ],
+      "ph": [
+        6.07,
+        7.38
+      ],
+      "soil_types": {
+        "Alluvial": 1.0
+      }
+    },
+    "kidneybeans": {
+      "moisture_pct": [
+        11.99,
+        22.5
+      ],
+      "soil_temp_c": [
+        17.12,
+        26.13
+      ],
+      "air_temp_c": [
+        16.0,
+        24.05
+      ],
+      "humidity_pct": [
+        18.0,
+        25.0
+      ],
+      "ph": [
+        5.52,
+        5.97
+      ],
+      "soil_types": {
+        "Alluvial": 0.5,
+        "Red": 0.5
+      }
+    },
+    "lentil": {
+      "moisture_pct": [
+        15.19,
+        27.4
+      ],
+      "soil_temp_c": [
+        20.18,
+        30.77
+      ],
+      "air_temp_c": [
+        18.0,
+        29.05
+      ],
+      "humidity_pct": [
+        60.0,
+        69.0
+      ],
+      "ph": [
+        6.06,
+        7.73
+      ],
+      "soil_types": {
+        "Alluvial": 0.69,
+        "Black": 0.31
+      }
+    },
+    "maize": {
+      "moisture_pct": [
+        11.79,
+        30.6
+      ],
+      "soil_temp_c": [
+        19.6,
+        27.75
+      ],
+      "air_temp_c": [
+        18.0,
+        26.0
+      ],
+      "humidity_pct": [
+        56.95,
+        74.0
+      ],
+      "ph": [
+        5.59,
+        6.86
+      ],
+      "soil_types": {
+        "Alluvial": 0.49,
+        "Red": 0.3,
+        "Black": 0.21
+      }
+    },
+    "mango": {
+      "moisture_pct": [
+        12.29,
+        21.5
+      ],
+      "soil_temp_c": [
+        28.75,
+        37.25
+      ],
+      "air_temp_c": [
+        27.0,
+        36.0
+      ],
+      "humidity_pct": [
+        46.0,
+        54.0
+      ],
+      "ph": [
+        4.67,
+        6.81
+      ],
+      "soil_types": {
+        "Alluvial": 0.38,
+        "Laterite": 0.31,
+        "Red": 0.31
+      }
+    },
+    "mothbeans": {
+      "moisture_pct": [
+        5.2,
+        12.82
+      ],
+      "soil_temp_c": [
+        26.43,
+        34.01
+      ],
+      "air_temp_c": [
+        24.0,
+        31.0
+      ],
+      "humidity_pct": [
+        42.0,
+        63.0
+      ],
+      "ph": [
+        3.68,
+        9.41
+      ],
+      "soil_types": {
+        "Sandy": 0.78,
+        "Red": 0.22
+      }
+    },
+    "mungbean": {
+      "moisture_pct": [
+        6.47,
+        18.9
+      ],
+      "soil_temp_c": [
+        28.8,
+        32.44
+      ],
+      "air_temp_c": [
+        27.0,
+        30.0
+      ],
+      "humidity_pct": [
+        80.0,
+        90.0
+      ],
+      "ph": [
+        6.27,
+        7.17
+      ],
+      "soil_types": {
+        "Alluvial": 0.5,
+        "Red": 0.28,
+        "Sandy": 0.22
+      }
+    },
+    "muskmelon": {
+      "moisture_pct": [
+        4.5,
+        16.1
+      ],
+      "soil_temp_c": [
+        28.99,
+        32.63
+      ],
+      "air_temp_c": [
+        27.0,
+        30.0
+      ],
+      "humidity_pct": [
+        90.0,
+        95.0
+      ],
+      "ph": [
+        6.04,
+        6.74
+      ],
+      "soil_types": {
+        "Sandy": 0.52,
+        "Alluvial": 0.48
+      }
+    },
+    "orange": {
+      "moisture_pct": [
+        13.0,
+        31.8
+      ],
+      "soil_temp_c": [
+        12.36,
+        33.88
+      ],
+      "air_temp_c": [
+        11.0,
+        34.05
+      ],
+      "humidity_pct": [
+        90.0,
+        95.0
+      ],
+      "ph": [
+        6.12,
+        7.85
+      ],
+      "soil_types": {
+        "Red": 0.38,
+        "Black": 0.33,
+        "Laterite": 0.29
+      }
+    },
+    "papaya": {
+      "moisture_pct": [
+        12.99,
+        25.11
+      ],
+      "soil_temp_c": [
+        25.55,
+        44.38
+      ],
+      "air_temp_c": [
+        23.95,
+        43.0
+      ],
+      "humidity_pct": [
+        90.0,
+        95.0
+      ],
+      "ph": [
+        6.52,
+        6.99
+      ],
+      "soil_types": {
+        "Alluvial": 0.53,
+        "Red": 0.29,
+        "Laterite": 0.18
+      }
+    },
+    "pigeonpeas": {
+      "moisture_pct": [
+        13.49,
+        33.0
+      ],
+      "soil_temp_c": [
+        20.3,
+        37.33
+      ],
+      "air_temp_c": [
+        19.0,
+        36.0
+      ],
+      "humidity_pct": [
+        32.0,
+        67.0
+      ],
+      "ph": [
+        4.67,
+        7.17
+      ],
+      "soil_types": {
+        "Red": 0.41,
+        "Black": 0.4,
+        "Alluvial": 0.19
+      }
+    },
+    "pomegranate": {
+      "moisture_pct": [
+        7.69,
+        31.3
+      ],
+      "soil_temp_c": [
+        19.8,
+        26.94
+      ],
+      "air_temp_c": [
+        18.0,
+        25.0
+      ],
+      "humidity_pct": [
+        85.95,
+        95.0
+      ],
+      "ph": [
+        5.68,
+        7.13
+      ],
+      "soil_types": {
+        "Red": 0.43,
+        "Black": 0.34,
+        "Sandy": 0.23
+      }
+    },
+    "rice": {
+      "moisture_pct": [
+        22.5,
+        34.4
+      ],
+      "soil_temp_c": [
+        21.18,
+        27.82
+      ],
+      "air_temp_c": [
+        20.0,
+        27.0
+      ],
+      "humidity_pct": [
+        80.0,
+        85.0
+      ],
+      "ph": [
+        5.11,
+        7.63
+      ],
+      "soil_types": {
+        "Alluvial": 0.65,
+        "Black": 0.24,
+        "Laterite": 0.11
+      }
+    },
+    "watermelon": {
+      "moisture_pct": [
+        5.5,
+        18.72
+      ],
+      "soil_temp_c": [
+        26.18,
+        29.44
+      ],
+      "air_temp_c": [
+        24.0,
+        27.0
+      ],
+      "humidity_pct": [
+        80.0,
+        90.0
+      ],
+      "ph": [
+        6.07,
+        6.93
+      ],
+      "soil_types": {
+        "Sandy": 0.6,
+        "Alluvial": 0.4
+      }
+    }
+  }
+}

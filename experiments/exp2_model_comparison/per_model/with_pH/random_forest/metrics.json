@@ -1,0 +1,18 @@
+{
+  "model": "Random Forest",
+  "feature_set": "with_pH",
+  "cv_accuracy": 0.8781818181818182,
+  "cv_accuracy_std": 0.008207031856939908,
+  "cv_f1_macro": 0.8774334960255714,
+  "cv_f1_macro_std": 0.008234136923716927,
+  "cv_top3_accuracy": 0.9695454545454545,
+  "holdout_accuracy": 0.8727272727272727,
+  "holdout_precision_macro": 0.8760580709769392,
+  "holdout_recall_macro": 0.8727272727272727,
+  "holdout_f1_macro": 0.8694999960705002,
+  "holdout_top3_accuracy": 0.9818181818181818,
+  "holdout_log_loss": 0.46870695971250087,
+  "fit_seconds": 1.746,
+  "cv_seconds": 3.06,
+  "predict_ms_per_sample": 0.6048
+}

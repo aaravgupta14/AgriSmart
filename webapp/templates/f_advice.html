@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Crop advice{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>What to grow on {{ p.plot_name }}</h1>
+    <p>Based on your last 7 days of soil readings{{ ', soil pH' if adv.with_ph }}, {{ p.soil_type|lower }} soil and the crops you grew before.</p></div>
+  <form class="inline" method="get">
+    <div class="field"><label>When will you sow?</label>
+      <select name="month" onchange="this.form.submit()">{% for m in MONTHS %}<option value="{{ loop.index }}" {{ 'selected' if loop.index == month }}>{{ m }}</option>{% endfor %}</select></div>
+  </form>
+</div>
+
+{% if growing %}<div class="flash warn">{{ crop_name(growing.crop_name) }} is still growing on this field. <a href="{{ url_for('my_crops') }}">Record its harvest</a> before starting a new crop.</div>{% endif %}
+{% if stale %}<div class="flash warn">The newest reading is from {{ ago(res.window_end) }}. <a href="{{ url_for('add_data') }}">Add a fresh reading</a> for up-to-date advice.</div>{% endif %}
+{% if not adv.with_ph %}<div class="flash warn">No soil pH test for this field. Advice uses sensor readings only. <a href="{{ url_for('add_data') }}#ph">Add your Soil Health Card pH</a> for more accurate advice.</div>{% endif %}
+
+{% if adv.cards %}
+  {% set can_grow = not growing %}
+  {% include "_advice_cards.html" %}
+{% else %}
+  <div class="card"><h2>No advice yet</h2><p>{{ adv.message or 'There are no usable readings for this field.' }}</p>
+    <a class="btn" href="{{ url_for('add_data') }}">Add a soil reading →</a></div>
+{% endif %}
+
+<details class="card tech">
+  <summary>Technical details (model, scores, data quality)</summary>
+  <div style="margin-top:14px">{% include "_rec_result.html" %}</div>
+</details>
+{% endblock %}

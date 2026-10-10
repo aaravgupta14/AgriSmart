@@ -1,0 +1,51 @@
+{# expects variable `res` (dict from AgriRecommender.recommend) #}
+{% set SCALE = {'moisture_pct': (0, 45), 'soil_temp_c': (5, 50), 'air_temp_c': (5, 45), 'humidity_pct': (10, 100), 'ph': (3.5, 10)} %}
+<div class="rec-status">
+  {% with status = res.status %}{% include "_status_badge.html" %}{% endwith %}
+  <span class="badge b-info">model: {{ 'with pH' if res.model_used == 'with_pH' else 'sensor-only (no pH)' }}</span>
+  <span class="badge b-mute">season now: {{ res.season_now }}</span>
+  <span class="badge b-mute">{{ res.n_readings_used }}/{{ res.n_readings }} readings used · mean quality {{ res.mean_quality|num(2) }}</span>
+  {% if res.vnbi is not none %}<span class="badge {{ 'b-bad' if res.vnbi < -0.75 else ('b-ok' if res.vnbi > 0.75 else 'b-mute') }}">VNBI {{ res.vnbi|num(2) }}</span>{% endif %}
+</div>
+{% if res.messages %}<ul class="msgs">{% for m in res.messages %}<li>{{ m }}</li>{% endfor %}</ul>{% endif %}
+
+{% if res.ranking %}
+<div class="rec-list" style="margin-top:22px">
+  {% for x in res.ranking if x.score >= 0.01 or x is sameas res.ranking[0] %}
+  <div class="rec {{ 'first' if loop.first }}">
+    <span class="rank">#{{ loop.index }}</span>
+    <h3>{{ x.crop }}</h3>
+    <div class="small muted">{{ x.info.season }} · {{ x.info.family }} · {{ x.info.maturation_days }} days · N-demand {{ x.info.n_demand|lower }}</div>
+    <div class="meter"><span style="width: {{ (100 * x.score)|round(1) }}%"></span></div>
+    <div class="small"><b class="mono">{{ x.score|pct(1) }}</b> final score <span class="muted">(model probability {{ x.p_ml|pct(1) }})</span></div>
+    <div class="factors">
+      {% for lbl, key in [('season', 'season_f'), ('rotation', 'rotation_f'), ('nitrogen', 'nutrient_f')] %}
+        {% set v = x[key] %}
+        <span class="factor {{ 'zero' if v == 0 else ('up' if v > 1 else ('down' if v < 1 else '')) }}">{{ lbl }} ×{{ '%.2f'|format(v) }}</span>
+      {% endfor %}
+    </div>
+    <table class="fit">
+      {% for f in x.fit_card %}
+      <tr>
+        <td style="width:38%">{{ FEATURE_LABEL.get(f.feature, f.feature) }}</td>
+        {% if f.feature == 'soil_type' %}
+          <td colspan="2"><span class="badge {{ 'b-ok' if f.state=='ok' else 'b-warn' }}">{{ f.value }} · {{ (100*f.share)|round|int }}% of training rows</span></td>
+        {% else %}
+          {% set lo_s, hi_s = SCALE[f.feature] %}
+          {% set rng = hi_s - lo_s %}
+          <td><div class="bar">
+            <span class="env" style="left: {{ [0, (f.lo - lo_s) / rng * 100]|max }}%; width: {{ [2, (f.hi - f.lo) / rng * 100]|max }}%"></span>
+            <span class="pt" style="left: calc({{ [0, [100, (f.value - lo_s) / rng * 100]|min]|max }}% - 1px)"></span>
+          </div></td>
+          <td class="mono" style="width:22%; text-align:right">{{ f.value }} {% if f.state=='ok' %}<span style="color:var(--leaf)">✓</span>{% elif f.state=='low' %}<span style="color:var(--clay)">↓</span>{% else %}<span style="color:var(--clay)">↑</span>{% endif %}</td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </table>
+    {% if x.context_notes %}<ul class="notes">{% for n in x.context_notes %}<li>{{ n }}</li>{% endfor %}</ul>{% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% if res.ranking|selectattr("score", "lt", 0.01)|list %}<p class="small muted" style="margin-top:10px">Other crops scored below 1 % and are hidden.</p>{% endif %}
+<p class="small muted" style="margin-top:12px">Green band = the crop's learned P5–P95 range for that measurement; black tick = this plot's 7-day consensus value. Final score = calibrated model probability × season × rotation × nitrogen (VNBI) factors.</p>
+{% endif %}

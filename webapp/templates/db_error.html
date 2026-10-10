@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card"><h1>Cannot reach the database</h1>
+<p>{{ error }}</p>
+<ol><li>Is MySQL running? (Windows: <span class="mono">services.msc</span> → MySQL80 → Start)</li>
+<li>Did you run <span class="mono">python scripts/setup_database.py</span>?</li>
+<li>Do the values in <span class="mono">.env</span> match your MySQL user?</li></ol></div>
+{% endblock %}

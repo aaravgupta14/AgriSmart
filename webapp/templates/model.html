@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Model & experiments{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Model &amp; experiments</h1>
+  <p>Trained on {{ meta.n_rows }} rows, {{ meta.classes|length }} crops. Full tables: <span class="mono">experiments/EXPERIMENTS_SUMMARY.md</span>.</p></div></div>
+
+<div class="grid g2">
+  {% for tag, m in meta.models.items() %}
+  <div class="card">
+    <h2>{{ 'With pH' if tag=='with_pH' else 'Sensor-only (no pH)' }}</h2>
+    <dl class="kv">
+      <dt>Algorithm</dt><dd>{{ m.algorithm }} + isotonic calibration</dd>
+      <dt>Features</dt><dd>{{ m.features|join(', ') }}</dd>
+      <dt>5-fold CV accuracy</dt><dd>{{ m.cv_accuracy|pct(1) }}</dd>
+      <dt>5-fold CV macro-F1</dt><dd>{{ m.cv_f1_macro|pct(1) }}</dd>
+      <dt>Hold-out accuracy</dt><dd>{{ m.holdout_accuracy|pct(1) }}</dd>
+      <dt>Hold-out top-3 accuracy</dt><dd>{{ m.holdout_top3_accuracy|pct(1) }}</dd>
+    </dl>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="card"><h2>Exp 2 · Model comparison</h2>
+  <img class="figure" src="{{ url_for('experiment_file', fname='exp2_model_comparison/chart_cv_accuracy.png') }}" alt="model comparison chart">
+  <div class="table-wrap"><table class="small" style="margin-top:12px">
+    <tr><th>Feature set</th><th>Model</th><th class="num">CV acc</th><th class="num">CV F1</th><th class="num">CV top-3</th><th class="num">Hold-out acc</th><th class="num">Fit s</th></tr>
+    {% for r in t.cmp|sort(attribute='cv_f1_macro', reverse=true)|sort(attribute='feature_set') %}<tr><td>{{ r.feature_set }}</td><td>{{ r.model }}</td><td class="num">{{ '%.3f'|format(r.cv_accuracy) }}</td><td class="num">{{ '%.3f'|format(r.cv_f1_macro) }}</td><td class="num">{{ '%.3f'|format(r.cv_top3_accuracy) }}</td><td class="num">{{ '%.3f'|format(r.holdout_accuracy) }}</td><td class="num">{{ r.fit_seconds }}</td></tr>{% endfor %}
+  </table></div></div>
+
+<div class="grid g2">
+  <div class="card"><h2>Exp 1 · Cost of having no NPK sensor</h2>
+    <table class="small"><tr><th>Features (original public data)</th><th class="num">Accuracy</th></tr>
+      {% for r in t.npk %}<tr><td>{{ r.features }}</td><td class="num">{{ '%.3f'|format(r.accuracy) }}</td></tr>{% endfor %}</table></div>
+  <div class="card"><h2>Exp 4 · Adaptive model when pH is missing</h2>
+    <table class="small"><tr><th>Scenario</th><th>Strategy</th><th class="num">Accuracy</th></tr>
+      {% for r in t.adaptive %}<tr><td>{{ r.scenario }}</td><td>{{ r.strategy }}</td><td class="num">{{ '%.3f'|format(r.accuracy) }}</td></tr>{% endfor %}</table></div>
+</div>
+
+<div class="card"><h2>Exp 3 · Quality-weighted temporal consensus vs single snapshot</h2>
+  <img class="figure" src="{{ url_for('experiment_file', fname='exp3_temporal_consensus/chart.png') }}" alt="temporal consensus chart" style="max-width:760px"></div>
+
+<div class="grid g2">
+  <div class="card"><h2>Exp 5 · Abstention</h2>
+    <img class="figure" src="{{ url_for('experiment_file', fname='exp5_abstention/risk_coverage.png') }}" alt="risk coverage">
+    <table class="small" style="margin-top:8px"><tr><th>Input</th><th class="num">Flagged as unusual</th></tr>
+      {% for r in t.ood %}<tr><td>{{ r.input }}</td><td class="num">{{ r.flagged_OOD|pct(1) }}</td></tr>{% endfor %}</table></div>
+  <div class="card"><h2>Feature importance (with pH)</h2>
+    <img class="figure" src="{{ url_for('experiment_file', fname='exp2_model_comparison/feature_importance_with_pH.png') }}" alt="feature importance"></div>
+</div>
+{% endblock %}

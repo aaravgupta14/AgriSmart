@@ -1,0 +1,18 @@
+{
+  "model": "Extra Trees",
+  "feature_set": "without_pH",
+  "cv_accuracy": 0.8168181818181818,
+  "cv_accuracy_std": 0.02500413188995467,
+  "cv_f1_macro": 0.8150054030467133,
+  "cv_f1_macro_std": 0.025675558878382226,
+  "cv_top3_accuracy": 0.9463636363636363,
+  "holdout_accuracy": 0.8090909090909091,
+  "holdout_precision_macro": 0.8102431706111693,
+  "holdout_recall_macro": 0.809090909090909,
+  "holdout_f1_macro": 0.8049994228856391,
+  "holdout_top3_accuracy": 0.975,
+  "holdout_log_loss": 0.6246170513232822,
+  "fit_seconds": 1.194,
+  "cv_seconds": 2.16,
+  "predict_ms_per_sample": 0.7963
+}

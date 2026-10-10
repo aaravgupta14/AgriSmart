@@ -1,0 +1,65 @@
+model,feature_set,param,value,cv_accuracy,cv_std
+Hist Gradient Boosting,with_pH,l2_regularization,0.0,0.8882,0.0097
+Hist Gradient Boosting,with_pH,l2_regularization,0.01,0.885,0.0074
+Hist Gradient Boosting,with_pH,l2_regularization,0.1,0.8859,0.0106
+Hist Gradient Boosting,with_pH,l2_regularization,1.0,0.8845,0.0088
+Hist Gradient Boosting,with_pH,l2_regularization,10.0,0.8882,0.0096
+Hist Gradient Boosting,with_pH,l2_regularization,100.0,0.8636,0.0136
+Random Forest,with_pH,min_samples_leaf,1.0,0.8773,0.0104
+Random Forest,with_pH,min_samples_leaf,2.0,0.8777,0.0096
+Random Forest,with_pH,min_samples_leaf,3.0,0.8755,0.0078
+Random Forest,with_pH,min_samples_leaf,5.0,0.8664,0.0143
+Random Forest,with_pH,min_samples_leaf,8.0,0.8536,0.0148
+Random Forest,with_pH,min_samples_leaf,12.0,0.8318,0.0193
+SVM (RBF),with_pH,C,0.1,0.6514,0.0108
+SVM (RBF),with_pH,C,0.3,0.7355,0.0127
+SVM (RBF),with_pH,C,1.0,0.8064,0.0134
+SVM (RBF),with_pH,C,3.0,0.8545,0.0131
+SVM (RBF),with_pH,C,10.0,0.8723,0.0137
+SVM (RBF),with_pH,C,30.0,0.8695,0.0107
+SVM (RBF),with_pH,C,100.0,0.8564,0.0157
+Logistic Regression,with_pH,C,0.001,0.4127,0.0254
+Logistic Regression,with_pH,C,0.01,0.55,0.0219
+Logistic Regression,with_pH,C,0.1,0.6482,0.0164
+Logistic Regression,with_pH,C,1.0,0.7323,0.0137
+Logistic Regression,with_pH,C,10.0,0.7823,0.0167
+Logistic Regression,with_pH,C,100.0,0.7964,0.0148
+MLP Neural Network,with_pH,alpha,0.0,0.83,0.0222
+MLP Neural Network,with_pH,alpha,0.0001,0.8286,0.0194
+MLP Neural Network,with_pH,alpha,0.001,0.8264,0.0201
+MLP Neural Network,with_pH,alpha,0.01,0.84,0.0225
+MLP Neural Network,with_pH,alpha,0.1,0.8455,0.0158
+MLP Neural Network,with_pH,alpha,1.0,0.82,0.0068
+MLP Neural Network,with_pH,alpha,10.0,0.4959,0.1224
+Hist Gradient Boosting,without_pH,l2_regularization,0.0,0.8177,0.0229
+Hist Gradient Boosting,without_pH,l2_regularization,0.01,0.8191,0.0266
+Hist Gradient Boosting,without_pH,l2_regularization,0.1,0.8209,0.0292
+Hist Gradient Boosting,without_pH,l2_regularization,1.0,0.8186,0.0228
+Hist Gradient Boosting,without_pH,l2_regularization,10.0,0.83,0.0188
+Hist Gradient Boosting,without_pH,l2_regularization,100.0,0.8086,0.0123
+Random Forest,without_pH,min_samples_leaf,1.0,0.8309,0.0216
+Random Forest,without_pH,min_samples_leaf,2.0,0.8355,0.0218
+Random Forest,without_pH,min_samples_leaf,3.0,0.8314,0.0184
+Random Forest,without_pH,min_samples_leaf,5.0,0.8264,0.0172
+Random Forest,without_pH,min_samples_leaf,8.0,0.82,0.0152
+Random Forest,without_pH,min_samples_leaf,12.0,0.8005,0.0235
+SVM (RBF),without_pH,C,0.1,0.5468,0.0145
+SVM (RBF),without_pH,C,0.3,0.6614,0.0118
+SVM (RBF),without_pH,C,1.0,0.7555,0.0212
+SVM (RBF),without_pH,C,3.0,0.7955,0.0172
+SVM (RBF),without_pH,C,10.0,0.8191,0.0232
+SVM (RBF),without_pH,C,30.0,0.825,0.029
+SVM (RBF),without_pH,C,100.0,0.8295,0.0271
+Logistic Regression,without_pH,C,0.001,0.3586,0.0241
+Logistic Regression,without_pH,C,0.01,0.4836,0.0193
+Logistic Regression,without_pH,C,0.1,0.5768,0.0207
+Logistic Regression,without_pH,C,1.0,0.6714,0.0202
+Logistic Regression,without_pH,C,10.0,0.7159,0.0188
+Logistic Regression,without_pH,C,100.0,0.7255,0.0234
+MLP Neural Network,without_pH,alpha,0.0,0.7773,0.0242
+MLP Neural Network,without_pH,alpha,0.0001,0.7782,0.024
+MLP Neural Network,without_pH,alpha,0.001,0.7786,0.023
+MLP Neural Network,without_pH,alpha,0.01,0.7923,0.0255
+MLP Neural Network,without_pH,alpha,0.1,0.7827,0.0306
+MLP Neural Network,without_pH,alpha,1.0,0.775,0.008
+MLP Neural Network,without_pH,alpha,10.0,0.2577,0.119

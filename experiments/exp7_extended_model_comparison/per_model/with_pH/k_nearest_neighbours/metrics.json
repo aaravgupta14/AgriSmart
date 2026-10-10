@@ -1,0 +1,18 @@
+{
+  "model": "K-Nearest Neighbours",
+  "feature_set": "with_pH",
+  "cv_accuracy": 0.8104545454545453,
+  "cv_accuracy_std": 0.020760340448489525,
+  "cv_f1_macro": 0.8041222558059511,
+  "cv_f1_macro_std": 0.0228735803713477,
+  "cv_top3_accuracy": 0.9340909090909092,
+  "holdout_accuracy": 0.8,
+  "holdout_precision_macro": 0.8053512982942798,
+  "holdout_recall_macro": 0.7999999999999999,
+  "holdout_f1_macro": 0.7918461154438098,
+  "holdout_top3_accuracy": 0.9568181818181818,
+  "holdout_log_loss": 1.707365539667311,
+  "fit_seconds": 0.021,
+  "cv_seconds": 3.55,
+  "predict_ms_per_sample": 0.0332
+}

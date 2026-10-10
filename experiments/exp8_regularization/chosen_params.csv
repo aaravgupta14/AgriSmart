@@ -1,0 +1,51 @@
+model,feature_set,fold,l2_regularization,max_leaf_nodes,min_samples_leaf,max_depth,max_features,C,alpha
+Hist Gradient Boosting,with_pH,1,0.0,31.0,50.0,,,,
+Hist Gradient Boosting,with_pH,2,0.1,15.0,20.0,,,,
+Hist Gradient Boosting,with_pH,3,10.0,15.0,20.0,,,,
+Hist Gradient Boosting,with_pH,4,10.0,15.0,20.0,,,,
+Hist Gradient Boosting,with_pH,5,0.0,31.0,20.0,,,,
+Random Forest,with_pH,1,,,1.0,15.0,0.5,,
+Random Forest,with_pH,2,,,1.0,15.0,sqrt,,
+Random Forest,with_pH,3,,,1.0,15.0,0.5,,
+Random Forest,with_pH,4,,,1.0,15.0,0.5,,
+Random Forest,with_pH,5,,,1.0,15.0,0.5,,
+SVM (RBF),with_pH,1,,,,,,30.0,
+SVM (RBF),with_pH,2,,,,,,10.0,
+SVM (RBF),with_pH,3,,,,,,10.0,
+SVM (RBF),with_pH,4,,,,,,30.0,
+SVM (RBF),with_pH,5,,,,,,10.0,
+Logistic Regression,with_pH,1,,,,,,100.0,
+Logistic Regression,with_pH,2,,,,,,100.0,
+Logistic Regression,with_pH,3,,,,,,100.0,
+Logistic Regression,with_pH,4,,,,,,100.0,
+Logistic Regression,with_pH,5,,,,,,100.0,
+MLP Neural Network,with_pH,1,,,,,,,0.0001
+MLP Neural Network,with_pH,2,,,,,,,0.01
+MLP Neural Network,with_pH,3,,,,,,,0.01
+MLP Neural Network,with_pH,4,,,,,,,0.0001
+MLP Neural Network,with_pH,5,,,,,,,0.0001
+Hist Gradient Boosting,without_pH,1,10.0,15.0,50.0,,,,
+Hist Gradient Boosting,without_pH,2,0.1,15.0,50.0,,,,
+Hist Gradient Boosting,without_pH,3,0.0,15.0,50.0,,,,
+Hist Gradient Boosting,without_pH,4,10.0,15.0,50.0,,,,
+Hist Gradient Boosting,without_pH,5,10.0,15.0,50.0,,,,
+Random Forest,without_pH,1,,,3.0,,0.5,,
+Random Forest,without_pH,2,,,1.0,15.0,sqrt,,
+Random Forest,without_pH,3,,,3.0,15.0,sqrt,,
+Random Forest,without_pH,4,,,3.0,,0.5,,
+Random Forest,without_pH,5,,,1.0,15.0,0.5,,
+SVM (RBF),without_pH,1,,,,,,100.0,
+SVM (RBF),without_pH,2,,,,,,30.0,
+SVM (RBF),without_pH,3,,,,,,30.0,
+SVM (RBF),without_pH,4,,,,,,30.0,
+SVM (RBF),without_pH,5,,,,,,30.0,
+Logistic Regression,without_pH,1,,,,,,100.0,
+Logistic Regression,without_pH,2,,,,,,100.0,
+Logistic Regression,without_pH,3,,,,,,100.0,
+Logistic Regression,without_pH,4,,,,,,100.0,
+Logistic Regression,without_pH,5,,,,,,100.0,
+MLP Neural Network,without_pH,1,,,,,,,0.01
+MLP Neural Network,without_pH,2,,,,,,,0.01
+MLP Neural Network,without_pH,3,,,,,,,1.0
+MLP Neural Network,without_pH,4,,,,,,,0.0001
+MLP Neural Network,without_pH,5,,,,,,,0.0001

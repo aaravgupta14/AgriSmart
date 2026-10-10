@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Yield reports{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Yield report</h1><p>Output of the stored procedure <span class="mono">sp_yield_report(crop, year)</span>.</p></div>
+  <form class="inline" method="get">
+    <div class="field"><label>Crop</label><select name="crop">{% for c in crops %}<option {{ 'selected' if c.crop_name == crop }}>{{ c.crop_name }}</option>{% endfor %}</select></div>
+    <div class="field"><label>Harvest year</label><select name="year">{% for y in years %}<option {{ 'selected' if y == year }}>{{ y }}</option>{% endfor %}</select></div>
+    <button class="btn">Run</button>
+  </form>
+</div>
+
+{% if total and total.cycles %}
+<div class="grid g4" style="margin-bottom:18px">
+  <div class="stat"><div class="k">Total yield</div><div class="v">{{ total.total_yield_kg|num(0) }}<small> kg</small></div><div class="s">{{ total.cycles }} cycles · {{ total.total_area_acres }} acres</div></div>
+  <div class="stat"><div class="k">Yield per acre</div><div class="v">{{ total.yield_kg_per_acre|num(0) }}<small> kg</small></div><div class="s">efficiency {{ total.avg_efficiency_pct }}% of catalogue</div></div>
+  <div class="stat"><div class="k">Maturation time</div><div class="v">{{ total.avg_actual_days|num(0) }}<small> days</small></div><div class="s">catalogue {{ total.catalogue_days }} days</div></div>
+  <div class="stat"><div class="k">Input cost</div><div class="v">₹{{ total.input_cost_per_kg|num(2) }}</div><div class="s">per kg of produce</div></div>
+</div>
+<div class="card"><h2 style="text-transform:capitalize">{{ crop }} · {{ year }} - per cycle</h2>
+  <div class="table-wrap"><table class="small">
+    <tr><th>Cycle</th><th>Plot</th><th>Farmer</th><th>Sown</th><th>Harvested</th><th class="num">Acres</th><th class="num">Days</th><th class="num">vs cat.</th><th class="num">Yield kg</th><th class="num">kg/acre</th><th class="num">Eff. %</th><th class="num">N kg</th><th class="num">₹/kg</th></tr>
+    {% for r in detail %}<tr><td class="mono">{{ r.cycle_id }}</td><td>{{ r.plot_name }}</td><td>{{ r.farmer }}</td><td>{{ r.sow_date }}</td><td>{{ r.harvest_date }}</td>
+      <td class="num">{{ r.area_acres }}</td><td class="num">{{ r.actual_days }}</td><td class="num">{{ '%+d'|format(r.days_vs_catalogue) }}</td><td class="num">{{ r.yield_kg|num(0) }}</td>
+      <td class="num">{{ r.yield_kg_per_acre|num(0) }}</td><td class="num">{{ r.yield_efficiency_pct }}</td><td class="num">{{ r.n_applied_kg|num(1) }}</td><td class="num">{{ r.input_cost_per_kg_yield }}</td></tr>{% endfor %}
+  </table></div></div>
+{% else %}
+<div class="card"><p class="muted">No harvested cycles of {{ crop }} in {{ year }}.</p></div>
+{% endif %}
+
+<div class="card"><h2>Efficiency by crop (all years)</h2>
+  <div class="chart-box"><canvas id="eff"></canvas></div></div>
+{% endblock %}
+{% block scripts %}
+<script>
+const d = {{ by_crop|tojson }};
+new Chart(document.getElementById("eff"), { type: "bar",
+  data: { labels: d.map(r => r.crop_name), datasets: [{ label: "Avg yield efficiency (% of catalogue)", data: d.map(r => Number(r.eff)), backgroundColor: "#8aa36b" }] },
+  options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, title: { display: true, text: "% of expected yield" } } } } });
+</script>
+{% endblock %}

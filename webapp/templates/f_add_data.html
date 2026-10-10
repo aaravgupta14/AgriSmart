@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Add soil data{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Add soil data by hand</h1>
+    <p>Only needed if this field has no sensor, the sensor is not working, or you have a new soil pH test.
+       Fill in whatever you measured – blank boxes are fine.</p></div>
+</div>
+
+<div class="card">
+  <h2>Reading for {{ p.plot_name }}</h2>
+  <form method="post" class="form-grid">
+    <input type="hidden" name="plot_id" value="{{ p.plot_id }}">
+    <div class="field"><label>Soil moisture (%)</label><input name="moisture_pct" type="number" step="0.1" placeholder="e.g. 22"></div>
+    <div class="field"><label>Soil temperature (°C)</label><input name="soil_temp_c" type="number" step="0.1" placeholder="e.g. 27"></div>
+    <div class="field"><label>Air temperature (°C)</label><input name="air_temp_c" type="number" step="0.1" placeholder="e.g. 30"></div>
+    <div class="field"><label>Humidity (%)</label><input name="humidity_pct" type="number" step="1" placeholder="e.g. 70"></div>
+    <div class="field" id="ph"><label>Soil pH <span class="muted">(Soil Health Card / test kit)</span></label><input name="ph" type="number" step="0.01" placeholder="e.g. 6.8"></div>
+    <div class="field"><label>When measured</label><input name="log_ts" type="datetime-local"><span class="small muted">leave blank for now</span></div>
+    <div class="field wide"><label>Note (optional)</label><input name="note" maxlength="200" placeholder="e.g. after rain"></div>
+    <div class="wide"><button class="btn">Save reading</button></div>
+  </form>
+  <p class="small muted">A pH test stays valid for 6 months, so you only need to enter it after a new soil test.</p>
+</div>
+
+<details class="card" {{ 'open' if quick }}>
+  <summary>Quick check for a field that isn't registered (nothing is saved)</summary>
+  <form method="post" class="form-grid" style="margin-top:14px">
+    <input type="hidden" name="mode" value="quick">
+    <div class="field"><label>Soil moisture (%)</label><input name="moisture_pct" type="number" step="0.1" required value="{{ request.form.moisture_pct if quick or request.form.mode == 'quick' }}"></div>
+    <div class="field"><label>Soil temperature (°C)</label><input name="soil_temp_c" type="number" step="0.1" required value="{{ request.form.soil_temp_c if quick or request.form.mode == 'quick' }}"></div>
+    <div class="field"><label>Air temperature (°C)</label><input name="air_temp_c" type="number" step="0.1" required value="{{ request.form.air_temp_c if quick or request.form.mode == 'quick' }}"></div>
+    <div class="field"><label>Humidity (%)</label><input name="humidity_pct" type="number" step="1" required value="{{ request.form.humidity_pct if quick or request.form.mode == 'quick' }}"></div>
+    <div class="field"><label>Soil pH (optional)</label><input name="ph" type="number" step="0.01" value="{{ request.form.ph if quick or request.form.mode == 'quick' }}"></div>
+    <div class="field"><label>Soil type</label><select name="soil_type">{% for s in SOIL_TYPES %}<option {{ 'selected' if request.form.soil_type == s }}>{{ s }}</option>{% endfor %}</select></div>
+    <div class="field"><label>Last crop grown</label><select name="last_crop"><option value="">don't know / none</option>{% for c in crops %}<option value="{{ c.crop_name }}" {{ 'selected' if request.form.last_crop == c.crop_name }}>{{ crop_name(c.crop_name) }}</option>{% endfor %}</select></div>
+    <div class="field"><label>When will you sow?</label><select name="month">{% for m in MONTHS %}<option value="{{ loop.index }}" {{ 'selected' if loop.index == (quick.month if quick else now.month) }}>{{ m }}</option>{% endfor %}</select></div>
+    <div class="wide"><button class="btn">Check which crops suit it</button></div>
+  </form>
+  {% if quick %}
+    <div style="margin-top:18px">{% set adv = quick.advice %}{% set can_grow = false %}{% include "_advice_cards.html" %}</div>
+  {% endif %}
+</details>
+{% endblock %}
