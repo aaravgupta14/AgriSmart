@@ -12,7 +12,8 @@ Reads the CSV lines printed by agrismart_node.ino, validates them
 Rules applied before insert:
   * column order comes from the sketch's '# node_id,...' header line; without one, a
     6-field (full node) or 4-field (no DS18B20 / pH) frame is accepted
-  * node_id must be known and active; a bare number from the sketch ('1') means NODE-01
+  * node_id must be known and active; a bare number from the sketch ('1') means
+    SERIAL_NODE_ID (.env), or NODE-01 when that is empty
   * 'nan' -> NULL (DHT11 read failure / pH module absent)
   * MOISTURE_SCALE=relative (.env): a 0-100 % moisture value is rescaled to soil water
     content, 100 % -> MOISTURE_SAT_VWC, before the range check; a '# moisture=vwc' line
@@ -51,8 +52,10 @@ def header_columns(line: str):
 
 
 def normalise_node_id(raw: str) -> str:
-    """A bare number from the sketch (e.g. '1') means NODE-01."""
-    return f"NODE-{int(raw):02d}" if raw.isdigit() else raw
+    """A bare number from the sketch (e.g. '1') means SERIAL_NODE_ID from .env, else NODE-01."""
+    if not raw.isdigit():
+        return raw
+    return config.SERIAL_NODE_ID or f"NODE-{int(raw):02d}"
 
 
 def parse(line: str, columns=None):
@@ -139,6 +142,8 @@ def main():
         ser = serial.Serial(a.port, a.baud, timeout=5)
         time.sleep(2)                                    # Uno resets when the port opens
         print(f"Listening on {a.port} @ {a.baud} - Ctrl+C to stop")
+        if config.SERIAL_NODE_ID:
+            print(f"node: a bare number from the sketch is stored as {config.SERIAL_NODE_ID}")
         if config.MOISTURE_SCALE == "relative":
             print(f"moisture: sketch sends 0-100 %, stored as water content (100 % -> {config.MOISTURE_SAT_VWC:g} %)")
         src = (ser.readline().decode("ascii", "ignore") for _ in iter(int, 1))
