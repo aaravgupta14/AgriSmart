@@ -70,6 +70,20 @@ LOW_CONF_THRESHOLD = 0.50  # chosen from the Exp 5 risk-coverage curve
 N_DEMAND_SCORE = {"FIXER": +1.0, "LOW": 0.0, "MEDIUM": -0.5, "HIGH": -1.0}
 
 
+def fill_missing_soil_temp(readings: pd.DataFrame) -> tuple[pd.DataFrame, bool]:
+    """A node with no DS18B20 sends no soil temperature at all. Estimate it with the
+    noise-free formula that created soil_temp_c in the training data (ml/build_dataset.py):
+        soil_temp = air_temp + 1.5 - 0.08 * (moisture - 20)
+    Only used when NO reading in the window has a soil temperature, so a real probe
+    that faults (-127 / 85 -> NULL) is still treated as invalid by quality_scores()."""
+    df = readings.copy()
+    if len(df) == 0 or "soil_temp_c" not in df or df["soil_temp_c"].notna().any():
+        return df, False
+    est = df["air_temp_c"].astype(float) + 1.5 - 0.08 * (df["moisture_pct"].astype(float) - 20)
+    df["soil_temp_c"] = est.round(2)
+    return df, bool(est.notna().any())
+
+
 # --------------------------------------------------------------------------- N1
 def quality_scores(readings: pd.DataFrame) -> pd.DataFrame:
     """Return a copy of `readings` with a `quality` column in [0,1] and a
@@ -238,6 +252,9 @@ class AgriRecommender:
         msgs.append("pH available - using with-pH model" if tag == "with_pH"
                     else "No valid pH - using sensor-only model (add a pH test for higher accuracy)")
 
+        readings, estimated = fill_missing_soil_temp(readings)
+        if estimated:
+            msgs.append("No soil-temperature probe - soil temperature estimated from air temperature and moisture")
         qdf = quality_scores(readings)
         w = qdf["quality"].to_numpy() * recency_weights(qdf["log_ts"], now)
         used = qdf[qdf["quality"] > 0]

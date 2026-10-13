@@ -9,7 +9,7 @@ import config
 from webapp.db import execute, get_db, query
 
 sys.path.insert(0, str(config.ROOT / "ml"))
-from recommender import NUM_SENSOR, AgriRecommender, quality_scores  # noqa: E402
+from recommender import NUM_SENSOR, AgriRecommender, fill_missing_soil_temp, quality_scores  # noqa: E402
 
 _engine = None
 
@@ -62,7 +62,7 @@ def recommend_for_plot(plot_id: int, month: int | None = None, save: bool = True
                   window_end=win.log_ts.max() if len(win) else None)
 
     if len(win):  # store per-reading quality so SQL views can exclude rejected rows
-        q = quality_scores(win)
+        q = quality_scores(fill_missing_soil_temp(win)[0])
         with get_db().cursor() as cur:
             cur.executemany("UPDATE soil_health_logs SET quality_score = %s WHERE log_id = %s",
                             [(float(a), int(b)) for a, b in zip(q.quality, q.log_id)])
