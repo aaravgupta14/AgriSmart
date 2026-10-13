@@ -14,6 +14,9 @@ Rules applied before insert:
     6-field (full node) or 4-field (no DS18B20 / pH) frame is accepted
   * node_id must be known and active; a bare number from the sketch ('1') means NODE-01
   * 'nan' -> NULL (DHT11 read failure / pH module absent)
+  * MOISTURE_SCALE=relative (.env): a 0-100 % moisture value is rescaled to soil water
+    content, 100 % -> MOISTURE_SAT_VWC, before the range check; a '# moisture=vwc' line
+    from the sketch (agrismart_node.ino) switches this off
   * values outside physical range -> NULL (the row is still kept if any value is valid)
   * DS18B20 -127 / 85 are passed through: the DB trigger nulls and annotates them,
     so the fault stays visible in the data for the quality score
@@ -67,6 +70,8 @@ def parse(line: str, columns=None):
             v = float(raw)
         except ValueError:
             return None, f"non-numeric {k}={raw!r}"
+        if k == "moisture_pct" and config.MOISTURE_SCALE == "relative":
+            v = v / 100 * config.MOISTURE_SAT_VWC
         if math.isnan(v):
             rec[k] = None
         elif k == "soil_temp_c" and v in (-127.0, 85.0):
@@ -127,12 +132,15 @@ def main():
     con = pymysql.connect(**config.DB, charset="utf8mb4")
     if a.simulate:
         src = simulated_lines(a.node, a.interval)
+        config.MOISTURE_SCALE = "vwc"                    # simulated values are already water content
         print(f"Simulating {a.node} every {a.interval}s - Ctrl+C to stop")
     else:
         import serial
         ser = serial.Serial(a.port, a.baud, timeout=5)
         time.sleep(2)                                    # Uno resets when the port opens
         print(f"Listening on {a.port} @ {a.baud} - Ctrl+C to stop")
+        if config.MOISTURE_SCALE == "relative":
+            print(f"moisture: sketch sends 0-100 %, stored as water content (100 % -> {config.MOISTURE_SAT_VWC:g} %)")
         src = (ser.readline().decode("ascii", "ignore") for _ in iter(int, 1))
     ok = bad = 0
     columns = None
@@ -140,6 +148,10 @@ def main():
     try:
         for line in src:
             if not line:
+                continue
+            if line.strip() == "# moisture=vwc" and config.MOISTURE_SCALE != "vwc":
+                config.MOISTURE_SCALE = "vwc"
+                print("moisture: sketch sends water content, no rescaling")
                 continue
             if line.lstrip().startswith("#") and header_columns(line):
                 columns = header_columns(line)
@@ -162,7 +174,11 @@ def main():
             last_reject, repeats = None, 0
             res = insert(con, rec)
             ok += res == "stored"
-            print(f"[{datetime.now():%H:%M:%S}] {res}: {line.strip()}   (stored={ok}, rejected={bad})")
+            sent = columns or LAYOUTS[len(line.split(","))]
+            blanked = [k for k in sent[1:] if rec[k] is None]          # 'nan' or out of range
+            note = f"  moisture->{rec['moisture_pct']:.1f}" if rec["moisture_pct"] is not None else ""
+            note += f"  stored as NULL: {','.join(blanked)}" if blanked else ""
+            print(f"[{datetime.now():%H:%M:%S}] {res}: {line.strip()}{note}   (stored={ok}, rejected={bad})")
     except KeyboardInterrupt:
         print("\nstopped")
     finally:

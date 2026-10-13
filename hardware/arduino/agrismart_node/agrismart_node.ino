@@ -5,12 +5,14 @@
     * Capacitive soil moisture sensor v1.2/v2.0  -> A0   (VCC 5V, GND)
     * DHT11 temperature + humidity module        -> D2   (VCC 5V, GND)
     * DS18B20 waterproof temperature probe       -> D4   (4.7k pull-up D4 -> 5V)
+                                                     (set USE_DS18B20 to 0 until it is wired)
     * OPTIONAL PH-4502C pH module (PO pin)       -> A1   (set USE_PH to 1)
 
   Output: one CSV line every SAMPLE_MS on USB serial @ 9600 baud
       node_id,moisture_pct,soil_temp_c,air_temp_c,humidity_pct,ph
   e.g. NODE-01,21.4,27.31,29.0,71.0,nan
-  Lines starting with '#' are comments and are ignored by the bridge.
+  Lines starting with '#' are comments and are ignored by the bridge
+  ("# moisture=vwc" tells the bridge the moisture value is already water content).
 
   Libraries (Arduino IDE -> Library Manager):
     "DHT sensor library" by Adafruit (+ "Adafruit Unified Sensor")
@@ -25,10 +27,14 @@
 const char* NODE_ID      = "NODE-01";     // must exist in sensor_nodes table
 const unsigned long SAMPLE_MS = 120000UL; // 2 minutes (use 10000 for testing)
 #define USE_PH 0                          // 1 if a PH-4502C module is connected
+#define USE_DS18B20 0                     // 1 once the DS18B20 soil probe is wired (else soil_temp = nan)
+#define PRINT_RAW 1                       // 1 = also print "# raw_moisture=..." for calibration
 
 // Two-point calibration of the capacitive sensor (see hardware/CALIBRATION.md)
 //   RAW_DRY : reading in oven/sun-dried soil from your field  -> 0 % water
 //   RAW_SAT : reading in the same soil fully saturated        -> SAT_VWC %
+// Quick check without dry soil: probe in air ~ RAW_DRY, probe in a glass of water ~ RAW_SAT.
+// With PRINT_RAW 1 the raw value is printed before every frame - copy it here.
 const int   RAW_DRY = 520;
 const int   RAW_SAT = 260;
 const float SAT_VWC = 45.0;               // typical porosity of loam (vol. %)
@@ -55,6 +61,9 @@ int readAvg(int pin, int n) {             // simple averaging to reduce ADC nois
 
 float readMoisturePct() {
   int raw = readAvg(PIN_MOIST, 10);
+#if PRINT_RAW
+  Serial.print(F("# raw_moisture=")); Serial.println(raw);
+#endif
   float vwc = (float)(RAW_DRY - raw) / (RAW_DRY - RAW_SAT) * SAT_VWC;
   if (vwc < 0) vwc = 0;
   if (vwc > 60) vwc = 60;
@@ -77,15 +86,22 @@ void printVal(float v, int digits) {
 void setup() {
   Serial.begin(9600);
   dht.begin();
+#if USE_DS18B20
   ds.begin();
   ds.setResolution(12);                   // 0.0625 degC
+#endif
   Serial.println(F("# AgriSmart node started"));
+  Serial.println(F("# moisture=vwc"));
   Serial.println(F("# node_id,moisture_pct,soil_temp_c,air_temp_c,humidity_pct,ph"));
 }
 
 void loop() {
+#if USE_DS18B20
   ds.requestTemperatures();
   float soilT = ds.getTempCByIndex(0);    // -127 if probe disconnected
+#else
+  float soilT = NAN;
+#endif
   float airT  = dht.readTemperature();    // NAN on read failure
   float hum   = dht.readHumidity();
   float moist = readMoisturePct();

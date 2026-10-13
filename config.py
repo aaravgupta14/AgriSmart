@@ -25,4 +25,8 @@ DB_ADMIN_PASSWORD = os.getenv("DB_ADMIN_PASSWORD", "")
 SECRET_KEY = os.getenv("FLASK_SECRET_KEY", "change-me-in-.env")
 SERIAL_PORT = os.getenv("SERIAL_PORT", "COM3")        # Windows e.g. COM3, Linux /dev/ttyACM0
 SERIAL_BAUD = int(os.getenv("SERIAL_BAUD", "9600"))
+# "vwc": the sketch already sends volumetric water content (agrismart_node.ino).
+# "relative": the sketch sends 0-100 % (dry air -> wet); the bridge rescales it so 100 % = MOISTURE_SAT_VWC.
+MOISTURE_SCALE = os.getenv("MOISTURE_SCALE", "vwc")
+MOISTURE_SAT_VWC = float(os.getenv("MOISTURE_SAT_VWC", "45"))   # same as SAT_VWC in agrismart_node.ino
 RECOMMEND_WINDOW_DAYS = int(os.getenv("RECOMMEND_WINDOW_DAYS", "7"))
