@@ -1,0 +1,15 @@
+== nested CV, with_pH
+  [with_pH] Hist Gradient Boosting   default=0.8882  regularized=0.8832  gain=-0.0050  improved 1/5 folds
+  [with_pH] Random Forest            default=0.8773  regularized=0.8805  gain=+0.0032  improved 2/5 folds
+  [with_pH] SVM (RBF)                default=0.8723  regularized=0.8723  gain=-0.0000  improved 1/5 folds
+  [with_pH] Logistic Regression      default=0.7323  regularized=0.7964  gain=+0.0641  improved 5/5 folds
+  [with_pH] MLP Neural Network       default=0.8286  regularized=0.8314  gain=+0.0027  improved 1/5 folds
+== sweep, with_pH
+== nested CV, without_pH
+  [without_pH] Hist Gradient Boosting   default=0.8177  regularized=0.8286  gain=+0.0109  improved 5/5 folds
+  [without_pH] Random Forest            default=0.8309  regularized=0.8336  gain=+0.0027  improved 3/5 folds
+  [without_pH] SVM (RBF)                default=0.8191  regularized=0.8295  gain=+0.0105  improved 5/5 folds
+  [without_pH] Logistic Regression      default=0.6714  regularized=0.7255  gain=+0.0541  improved 5/5 folds
+  [without_pH] MLP Neural Network       default=0.7782  regularized=0.7823  gain=+0.0041  improved 2/5 folds
+== sweep, without_pH
+saved to experiments\exp8_regularization

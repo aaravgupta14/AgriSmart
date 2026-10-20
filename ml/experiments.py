@@ -305,7 +305,7 @@ Per-fold scores: `exp2_model_comparison/cv_scores_per_fold.csv`.
 
 {md(e2s)}
 
-Selected (highest mean CV macro-F1):
+Deployed models (fixed in DEPLOY in ml/train_models.py after the Exp 7 fold comparison):
 * with pH    -> **{meta['models']['with_pH']['algorithm']}**
 * without pH -> **{meta['models']['without_pH']['algorithm']}**
 

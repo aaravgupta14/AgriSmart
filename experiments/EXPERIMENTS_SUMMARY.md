@@ -43,7 +43,7 @@ Per-fold scores: `exp2_model_comparison/cv_scores_per_fold.csv`.
 | without_pH    | Logistic Regression      |        0.6714 |            0.0202 |        0.6582 |             0.8673 |             0.6727 |             0.6587 |                  0.9409 |        0.1670 |
 | without_pH    | Gaussian Naive Bayes     |        0.5459 |            0.0168 |        0.5266 |             0.7864 |             0.5568 |             0.5398 |                  0.9455 |        0.0310 |
 
-Selected (highest mean CV macro-F1):
+Deployed models (fixed in DEPLOY in ml/train_models.py after the Exp 7 fold comparison):
 * with pH    -> **Soft Voting (RF+HGB+SVM)**
 * without pH -> **Random Forest**
 

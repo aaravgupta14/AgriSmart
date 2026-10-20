@@ -1,0 +1,46 @@
+== Exp 3: temporal consensus vs snapshot
+  f=0.00 A=0.580 | B=0.580 | C=0.902 | D=0.809 | E=0.902 | F=0.902 | G=0.882 | H=0.902
+  f=0.05 A=0.614 | B=0.616 | C=0.868 | D=0.807 | E=0.898 | F=0.898 | G=0.884 | H=0.895
+  f=0.10 A=0.589 | B=0.586 | C=0.820 | D=0.793 | E=0.873 | F=0.866 | G=0.870 | H=0.875
+  f=0.20 A=0.595 | B=0.600 | C=0.807 | D=0.825 | E=0.870 | F=0.873 | G=0.880 | H=0.882
+  f=0.30 A=0.539 | B=0.543 | C=0.768 | D=0.823 | E=0.848 | F=0.857 | G=0.843 | H=0.857
+== Exp 4: adaptive model selection
+   scenario                                     strategy  accuracy
+pH measured                                with-pH model    0.9023
+ pH missing  with-pH model, pH imputed = training median    0.7909
+ pH missing      with-pH model, pH imputed = neutral 7.0    0.6773
+ pH missing sensor-only model (proposed adaptive switch)    0.8136
+== Exp 5: abstention
+ threshold  coverage  accuracy_on_accepted  accuracy_on_flagged
+      0.00     1.000                 0.902                  NaN
+      0.05     1.000                 0.902                  NaN
+      0.10     1.000                 0.902                  NaN
+      0.15     1.000                 0.902                  NaN
+      0.20     1.000                 0.902                  NaN
+      0.25     1.000                 0.902                  NaN
+      0.30     1.000                 0.902                  NaN
+      0.35     1.000                 0.902                  NaN
+      0.40     0.991                 0.911                0.000
+      0.45     0.989                 0.910                0.200
+      0.50     0.970                 0.918                0.385
+      0.55     0.952                 0.926                0.429
+      0.60     0.927                 0.934                0.500
+      0.65     0.902                 0.942                0.535
+      0.70     0.877                 0.946                0.593
+      0.75     0.832                 0.948                0.676
+      0.80     0.791                 0.963                0.674
+      0.85     0.734                 0.969                0.718
+      0.90     0.668                 0.986                0.733
+  conf>=0.30: coverage=1.000 acc_accepted=0.902 acc_flagged=nan
+                                            input    n  flagged_OOD
+                               real test readings  440       0.0045
+random in-range readings (no real crop condition) 1000       0.7010
+== Exp 6: context re-ranking
+  case-study reading: dataset row 150 (true label maize), margin 0.235
+                                                                                                   base_reading                                                 scenario  VNBI                             ML-only top-3                        Context-aware top-3                                                                                                                         notes on #1
+row 150: moisture_pct=17.4, soil_temp_c=23.125, air_temp_c=21.0, humidity_pct=65.0, ph=6.67, soil_type=Alluvial                             S1 no history, July (Kharif)   NaN maize (0.62), lentil (0.38), apple (0.00)  maize (0.62), lentil (0.23), apple (0.00)                                                                                                                                   -
+row 150: moisture_pct=17.4, soil_temp_c=23.125, air_temp_c=21.0, humidity_pct=65.0, ph=6.67, soil_type=Alluvial                     S2 last crop = model's #1 crop, July -1.00 maize (0.62), lentil (0.38), apple (0.00) lentil (0.30), apple (0.00), banana (0.00) off-season (best sown in Rabi); legume after cereal/fibre restores soil N; soil N likely depleted (VNBI) - N-fixing legume favoured
+row 150: moisture_pct=17.4, soil_temp_c=23.125, air_temp_c=21.0, humidity_pct=65.0, ph=6.67, soil_type=Alluvial S3 rice->maize->cotton, no fertiliser (N depleted), July -1.96 maize (0.62), lentil (0.38), apple (0.00)  maize (0.52), lentil (0.30), apple (0.00)                                                                               soil N likely depleted (VNBI) - high-N crop penalised
+row 150: moisture_pct=17.4, soil_temp_c=23.125, air_temp_c=21.0, humidity_pct=65.0, ph=6.67, soil_type=Alluvial   S4 same history but 50 kg N/acre urea each cycle, July  0.00 maize (0.62), lentil (0.38), apple (0.00)  maize (0.62), lentil (0.26), apple (0.00)                                                                                                                                   -
+row 150: moisture_pct=17.4, soil_temp_c=23.125, air_temp_c=21.0, humidity_pct=65.0, ph=6.67, soil_type=Alluvial                           S5 no history, November (Rabi)   NaN maize (0.62), lentil (0.38), apple (0.00)  lentil (0.38), maize (0.37), apple (0.00)                                                                                                                                   -
+wrote experiments\EXPERIMENTS_SUMMARY.md

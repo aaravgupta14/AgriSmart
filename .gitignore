@@ -1,7 +1,10 @@
 # secrets / local configuration
 .env
-.vscode/
 CLAUDE.md
+
+# VS Code: only the shared run tasks are published
+.vscode/*
+!.vscode/tasks.json
 
 # Python
 .venv/
@@ -9,8 +12,9 @@ __pycache__/
 *.pyc
 .ipynb_checkpoints/
 
-# local Windows run helpers and their logs (machine-specific)
-run/
+# machine-specific logs written by run/setup_all.py and run/0_check_system.bat
+run/setup_log.txt
+run/system_check.txt
 
 # trained models are large (~75 MB) and fully reproducible: python ml/train_models.py
 ml/models/*.joblib

@@ -1,0 +1,34 @@
+== Experiment 1: N-P-K ablation on the original public dataset
+                                  features                     model  accuracy  accuracy_std  f1_macro  top3_accuracy                    fold_accuracies
+N,P,K,temp,humidity,pH,rainfall (original) Random Forest (400 trees)    0.9959        0.0027    0.9959         1.0000 0.9955;0.9932;1.0000;0.9977;0.9932
+        temp,humidity,pH,rainfall (no NPK) Random Forest (400 trees)    0.9618        0.0066    0.9616         0.9977 0.9727;0.9636;0.9614;0.9591;0.9523
+    temp,humidity,rainfall (no NPK, no pH) Random Forest (400 trees)    0.9200        0.0107    0.9195         0.9895 0.9318;0.9091;0.9205;0.9068;0.9318
+    temp,humidity,pH (no NPK, no rainfall) Random Forest (400 trees)    0.7423        0.0132    0.7389         0.8986 0.7273;0.7545;0.7523;0.7523;0.7250
+== Experiment 2: model comparison on the AgriSmart sensor dataset
+  [with_pH] Logistic Regression      cv_acc=0.7323 cv_f1=0.7259 hold_acc=0.7273 top3=0.9614
+  [with_pH] Gaussian Naive Bayes     cv_acc=0.5950 cv_f1=0.5834 hold_acc=0.6045 top3=0.9636
+  [with_pH] K-Nearest Neighbours     cv_acc=0.8105 cv_f1=0.8041 hold_acc=0.8000 top3=0.9568
+  [with_pH] Decision Tree            cv_acc=0.8195 cv_f1=0.8188 hold_acc=0.7932 top3=0.8068
+  [with_pH] SVM (RBF)                cv_acc=0.8723 cv_f1=0.8709 hold_acc=0.8818 top3=0.9864
+  [with_pH] Random Forest            cv_acc=0.8782 cv_f1=0.8774 hold_acc=0.8727 top3=0.9818
+  [with_pH] Extra Trees              cv_acc=0.8700 cv_f1=0.8692 hold_acc=0.8682 top3=0.9864
+  [with_pH] Hist Gradient Boosting   cv_acc=0.8882 cv_f1=0.8879 hold_acc=0.8909 top3=0.9932
+  [with_pH] Soft Voting (RF+HGB+SVM) cv_acc=0.8950 cv_f1=0.8945 hold_acc=0.8932 top3=0.9977
+  [without_pH] Logistic Regression      cv_acc=0.6714 cv_f1=0.6582 hold_acc=0.6727 top3=0.9409
+  [without_pH] Gaussian Naive Bayes     cv_acc=0.5459 cv_f1=0.5266 hold_acc=0.5568 top3=0.9455
+  [without_pH] K-Nearest Neighbours     cv_acc=0.7945 cv_f1=0.7907 hold_acc=0.7977 top3=0.9500
+  [without_pH] Decision Tree            cv_acc=0.7718 cv_f1=0.7710 hold_acc=0.7523 top3=0.7659
+  [without_pH] SVM (RBF)                cv_acc=0.8191 cv_f1=0.8157 hold_acc=0.8250 top3=0.9795
+  [without_pH] Random Forest            cv_acc=0.8314 cv_f1=0.8294 hold_acc=0.8045 top3=0.9818
+  [without_pH] Extra Trees              cv_acc=0.8168 cv_f1=0.8150 hold_acc=0.8091 top3=0.9750
+  [without_pH] Hist Gradient Boosting   cv_acc=0.8177 cv_f1=0.8174 hold_acc=0.8159 top3=0.9773
+  [without_pH] Soft Voting (RF+HGB+SVM) cv_acc=0.8332 cv_f1=0.8327 hold_acc=0.8386 top3=0.9886
+== Deployed for with_pH: Soft Voting (RF+HGB+SVM)  (fixed in DEPLOY; best by CV macro-F1 was Soft Voting (RF+HGB+SVM))
+                                         model  holdout_accuracy  holdout_top3_accuracy  log_loss  ECE_15bins  mean_top1_confidence
+       Soft Voting (RF+HGB+SVM) (uncalibrated)            0.8932                 0.9977    0.3592      0.0858                0.8118
+Soft Voting (RF+HGB+SVM) (isotonic-calibrated)            0.9023                 0.9932    0.4153      0.0223                0.8960
+== Deployed for without_pH: Random Forest  (fixed in DEPLOY; best by CV macro-F1 was Soft Voting (RF+HGB+SVM))
+                              model  holdout_accuracy  holdout_top3_accuracy  log_loss  ECE_15bins  mean_top1_confidence
+       Random Forest (uncalibrated)            0.8045                 0.9818    0.6066      0.0739                0.7537
+Random Forest (isotonic-calibrated)            0.8136                 0.9864    0.6133      0.0510                0.8295
+saved models + meta to ml\models and evaluations to experiments

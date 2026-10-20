@@ -25,6 +25,9 @@ Use the **capacitive** moisture sensor, not the resistive FC-28 fork, because th
 ## pH (optional PH-4502C)
 Measure soil pH the lab way: mix 1 part soil with 2.5 parts distilled water, stir, wait 30 min, and dip the probe in the liquid. This is the standard 1 : 2.5 soil-water method. Calibrate with pH 7 and pH 4 buffer sachets, then set `PH7_VOLT` and `PH_SLOPE` in the sketch. Set `USE_PH 1`.
 
+## Using your own sketch
+The bridge also accepts other sketches. It reads the column order from a `# node_id,...` header line, accepts 4-field frames (`node_id,moisture,air_temp,humidity`), and stores a bare node number such as `1` as `SERIAL_NODE_ID` from `.env`. If your sketch reports moisture on a 0-100 % dry-to-wet scale instead of water content, set `MOISTURE_SCALE=relative` in `.env`; the bridge then maps 100 % to `MOISTURE_SAT_VWC` (default 45 %).
+
 ## Data path
 `agrismart_node.ino` prints `NODE-01,21.4,27.31,29.0,71.0,nan` every 2 min, and `hardware/bridge/serial_bridge.py` validates the line and INSERTs it into `soil_health_logs`. The trigger `trg_soil_log_before_insert` nulls DS18B20 fault codes (-127 / 85) and `trg_soil_log_after_insert` updates `sensor_nodes.last_seen_ts`.
 

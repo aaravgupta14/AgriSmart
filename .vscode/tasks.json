@@ -1,0 +1,9 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "AgriSmart 0: Check system", "type": "shell", "command": "${workspaceFolder}\\run\\0_check_system.bat", "problemMatcher": [] },
+    { "label": "AgriSmart 1: Setup (packages + models + database)", "type": "shell", "command": "${workspaceFolder}\\run\\1_setup.bat", "problemMatcher": [] },
+    { "label": "AgriSmart 2: Start website", "type": "shell", "command": "${workspaceFolder}\\run\\2_start_website.bat", "problemMatcher": [], "isBackground": true },
+    { "label": "AgriSmart 3: Simulate sensor node", "type": "shell", "command": "${workspaceFolder}\\run\\3_simulate_sensor.bat", "problemMatcher": [], "isBackground": true }
+  ]
+}

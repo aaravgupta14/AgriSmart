@@ -1,0 +1,67 @@
+Comparing 16 models: Logistic Regression, Gaussian Naive Bayes, K-Nearest Neighbours, Decision Tree, SVM (RBF), Random Forest, Extra Trees, Hist Gradient Boosting, MLP Neural Network, Linear Discriminant Analysis, Quadratic Discriminant Analysis, AdaBoost (trees), Bagging (trees), Gradient Boosting (classic), Soft Voting (RF+HGB+SVM), Stacking (RF+HGB+KNN -> LR)
+  [with_pH] Logistic Regression      cv_acc=0.7323 cv_f1=0.7259 hold_acc=0.7273 top3=0.9614
+  [with_pH] Gaussian Naive Bayes     cv_acc=0.5950 cv_f1=0.5834 hold_acc=0.6045 top3=0.9636
+  [with_pH] K-Nearest Neighbours     cv_acc=0.8105 cv_f1=0.8041 hold_acc=0.8000 top3=0.9568
+  [with_pH] Decision Tree            cv_acc=0.8195 cv_f1=0.8188 hold_acc=0.7932 top3=0.8068
+  [with_pH] SVM (RBF)                cv_acc=0.8723 cv_f1=0.8709 hold_acc=0.8818 top3=0.9864
+  [with_pH] Random Forest            cv_acc=0.8782 cv_f1=0.8774 hold_acc=0.8727 top3=0.9818
+  [with_pH] Extra Trees              cv_acc=0.8700 cv_f1=0.8692 hold_acc=0.8682 top3=0.9864
+  [with_pH] Hist Gradient Boosting   cv_acc=0.8882 cv_f1=0.8879 hold_acc=0.8909 top3=0.9932
+  [with_pH] MLP Neural Network       cv_acc=0.8286 cv_f1=0.8259 hold_acc=0.8364 top3=0.9841
+  [with_pH] Linear Discriminant Analysis cv_acc=0.7282 cv_f1=0.7251 hold_acc=0.7091 top3=0.9500
+  [with_pH] Quadratic Discriminant Analysis cv_acc=0.7673 cv_f1=0.7582 hold_acc=0.7932 top3=0.9727
+  [with_pH] AdaBoost (trees)         cv_acc=0.7686 cv_f1=0.7632 hold_acc=0.7432 top3=0.9909
+  [with_pH] Bagging (trees)          cv_acc=0.8700 cv_f1=0.8696 hold_acc=0.8523 top3=0.9864
+  [with_pH] Gradient Boosting (classic) cv_acc=0.8600 cv_f1=0.8600 hold_acc=0.8750 top3=0.9909
+  [with_pH] Soft Voting (RF+HGB+SVM) cv_acc=0.8950 cv_f1=0.8945 hold_acc=0.8932 top3=0.9977
+  [with_pH] Stacking (RF+HGB+KNN -> LR) cv_acc=0.8923 cv_f1=0.8921 hold_acc=0.8977 top3=0.9818
+  [without_pH] Logistic Regression      cv_acc=0.6714 cv_f1=0.6582 hold_acc=0.6727 top3=0.9409
+  [without_pH] Gaussian Naive Bayes     cv_acc=0.5459 cv_f1=0.5266 hold_acc=0.5568 top3=0.9455
+  [without_pH] K-Nearest Neighbours     cv_acc=0.7945 cv_f1=0.7907 hold_acc=0.7977 top3=0.9500
+  [without_pH] Decision Tree            cv_acc=0.7718 cv_f1=0.7710 hold_acc=0.7523 top3=0.7659
+  [without_pH] SVM (RBF)                cv_acc=0.8191 cv_f1=0.8157 hold_acc=0.8250 top3=0.9795
+  [without_pH] Random Forest            cv_acc=0.8314 cv_f1=0.8294 hold_acc=0.8045 top3=0.9818
+  [without_pH] Extra Trees              cv_acc=0.8168 cv_f1=0.8150 hold_acc=0.8091 top3=0.9750
+  [without_pH] Hist Gradient Boosting   cv_acc=0.8177 cv_f1=0.8174 hold_acc=0.8159 top3=0.9773
+  [without_pH] MLP Neural Network       cv_acc=0.7782 cv_f1=0.7722 hold_acc=0.8068 top3=0.9864
+  [without_pH] Linear Discriminant Analysis cv_acc=0.6677 cv_f1=0.6591 hold_acc=0.6432 top3=0.9364
+  [without_pH] Quadratic Discriminant Analysis cv_acc=0.6827 cv_f1=0.6665 hold_acc=0.7000 top3=0.9636
+  [without_pH] AdaBoost (trees)         cv_acc=0.6886 cv_f1=0.6807 hold_acc=0.6727 top3=0.9795
+  [without_pH] Bagging (trees)          cv_acc=0.8209 cv_f1=0.8189 hold_acc=0.7909 top3=0.9750
+  [without_pH] Gradient Boosting (classic) cv_acc=0.8045 cv_f1=0.8039 hold_acc=0.8068 top3=0.9864
+  [without_pH] Soft Voting (RF+HGB+SVM) cv_acc=0.8332 cv_f1=0.8327 hold_acc=0.8386 top3=0.9886
+  [without_pH] Stacking (RF+HGB+KNN -> LR) cv_acc=0.8341 cv_f1=0.8337 hold_acc=0.8136 top3=0.9773
+feature_set                           model  cv_accuracy  cv_f1_macro  holdout_top3_accuracy  fit_seconds
+    with_pH        Soft Voting (RF+HGB+SVM)       0.8950       0.8945                 0.9977        8.799
+    with_pH     Stacking (RF+HGB+KNN -> LR)       0.8923       0.8921                 0.9818       58.454
+    with_pH          Hist Gradient Boosting       0.8882       0.8879                 0.9932        8.538
+    with_pH                   Random Forest       0.8782       0.8774                 0.9818        1.385
+    with_pH                       SVM (RBF)       0.8723       0.8709                 0.9864        0.455
+    with_pH                 Bagging (trees)       0.8700       0.8696                 0.9864        0.413
+    with_pH                     Extra Trees       0.8700       0.8692                 0.9864        1.319
+    with_pH     Gradient Boosting (classic)       0.8600       0.8600                 0.9909       13.206
+    with_pH              MLP Neural Network       0.8286       0.8259                 0.9841        1.186
+    with_pH                   Decision Tree       0.8195       0.8188                 0.8068        0.031
+    with_pH            K-Nearest Neighbours       0.8105       0.8041                 0.9568        0.021
+    with_pH                AdaBoost (trees)       0.7686       0.7632                 0.9909        2.094
+    with_pH Quadratic Discriminant Analysis       0.7673       0.7582                 0.9727        0.043
+    with_pH             Logistic Regression       0.7323       0.7259                 0.9614        0.107
+    with_pH    Linear Discriminant Analysis       0.7282       0.7251                 0.9500        0.048
+    with_pH            Gaussian Naive Bayes       0.5950       0.5834                 0.9636        0.032
+ without_pH     Stacking (RF+HGB+KNN -> LR)       0.8341       0.8337                 0.9773       55.331
+ without_pH        Soft Voting (RF+HGB+SVM)       0.8332       0.8327                 0.9886       11.311
+ without_pH                   Random Forest       0.8314       0.8294                 0.9818        1.442
+ without_pH                 Bagging (trees)       0.8209       0.8189                 0.9750        0.452
+ without_pH          Hist Gradient Boosting       0.8177       0.8174                 0.9773       10.974
+ without_pH                       SVM (RBF)       0.8191       0.8157                 0.9795        0.365
+ without_pH                     Extra Trees       0.8168       0.8150                 0.9750        1.194
+ without_pH     Gradient Boosting (classic)       0.8045       0.8039                 0.9864       12.293
+ without_pH            K-Nearest Neighbours       0.7945       0.7907                 0.9500        0.030
+ without_pH              MLP Neural Network       0.7782       0.7722                 0.9864        2.111
+ without_pH                   Decision Tree       0.7718       0.7710                 0.7659        0.039
+ without_pH                AdaBoost (trees)       0.6886       0.6807                 0.9795        1.811
+ without_pH Quadratic Discriminant Analysis       0.6827       0.6665                 0.9636        0.040
+ without_pH    Linear Discriminant Analysis       0.6677       0.6591                 0.9364        0.038
+ without_pH             Logistic Regression       0.6714       0.6582                 0.9409        0.170
+ without_pH            Gaussian Naive Bayes       0.5459       0.5266                 0.9455        0.036
+saved to experiments\exp7_extended_model_comparison
