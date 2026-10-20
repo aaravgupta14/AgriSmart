@@ -32,9 +32,8 @@ Farmer's browser  <-->  Flask website (webapp/)  <-->  ML engine (ml/recommender
 10. [Novelty](#10-novelty)
 11. [Experiments and how to reproduce them](#11-experiments-and-how-to-reproduce-them)
 12. [API](#12-api)
-13. [Reports and documents](#13-reports-and-documents)
-14. [Limitations](#14-limitations)
-15. [Credits and references](#15-credits-and-references)
+13. [Limitations](#13-limitations)
+14. [Credits and references](#14-credits-and-references)
 
 ---
 
@@ -68,7 +67,7 @@ AgriSmart/
 ├── ml/
 │   ├── build_dataset.py        raw -> processed dataset (documented derivation)
 │   ├── train_models.py         Exp 0-2: compares 9 models on 2 feature sets, calibrates and saves the deployed ones
-│   ├── experiments.py          Exp 3-6 (novelty) + writes experiments/EXPERIMENTS_SUMMARY.md
+│   ├── experiments.py          Exp 3-6 (novelty) + writes a local summary, experiments/EXPERIMENTS_SUMMARY.md
 │   ├── model_zoo.py            extra models for Exp 7 (add one with one line in EXTRA_MODELS)
 │   ├── compare_models.py       Exp 7: extended comparison of 16 models
 │   ├── regularization_experiment.py   Exp 8: nested-CV regularisation study
@@ -78,9 +77,8 @@ AgriSmart/
 │   ├── common.py               feature lists and physical sensor ranges
 │   └── models/                 model_meta.json (the *.joblib files are created by train_models.py, not shipped)
 ├── experiments/                every result used in the report
-│   ├── EXPERIMENTS_SUMMARY.md  all result tables in one file (auto-generated)
-│   ├── exp0_dataset/ ... exp8_regularization/
-│   └── figures/                fig01-fig26, confusion_matrices/, FIGURES_INDEX.md
+│   ├── exp0_dataset/ ... exp8_regularization/   result CSVs and charts of each experiment
+│   └── figures/                fig01-fig26, confusion_matrices/
 ├── database/
 │   ├── 01_schema.sql           9 tables in 3NF with PK / FK / UNIQUE / CHECK constraints
 │   ├── 02_views.sql            8 views, including v_recommended_crops (rule-based SQL recommender)
@@ -95,19 +93,14 @@ AgriSmart/
 │   └── static/css/style.css
 ├── hardware/
 │   ├── arduino/agrismart_node/agrismart_node.ino   reference sketch for the sensor node
-│   ├── bridge/serial_bridge.py serial -> MySQL (also --simulate without hardware)
-│   └── CALIBRATION.md          wiring, parts and sensor calibration
-├── scripts/
-│   ├── setup_windows.ps1       PowerShell setup (installs MySQL with winget if missing)
-│   ├── setup_database.py       creates the database and app user and loads all SQL files
-│   └── run_pipeline.py         rebuilds dataset, models, Exp 0-6 and seed data from the raw data
-└── docs/
-    ├── NOVELTY.md              the novel contributions with measured results
-    ├── LabAssessment9_NoveltyReport_AgriSmart.docx / .pdf   project details and novelty report
-    └── AgriSmart_ConferencePaper.docx / .pdf                IEEE-format conference paper
+│   └── bridge/serial_bridge.py serial -> MySQL (also --simulate without hardware)
+└── scripts/
+    ├── setup_windows.ps1       PowerShell setup (installs MySQL with winget if missing)
+    ├── setup_database.py       creates the database and app user and loads all SQL files
+    └── run_pipeline.py         rebuilds dataset, models, Exp 0-6 and seed data from the raw data
 ```
 
-Not in the repository: `.env` (your passwords), `.venv/`, `ml/models/*.joblib` (about 75 MB, rebuilt by setup), and machine-specific setup logs.
+Not in the repository: `.env` (your passwords), `.venv/`, `ml/models/*.joblib` (about 75 MB, rebuilt by setup), machine-specific setup logs, the project reports, and generated Markdown summaries such as `experiments/EXPERIMENTS_SUMMARY.md` (written locally by `ml/experiments.py`).
 
 ## 3. Quick start (Windows)
 
@@ -165,7 +158,11 @@ The first crop advice after the website starts is slower because the models are 
 | DS18B20 waterproof probe (+4.7 kΩ pull-up to 5 V) | soil temperature | D4 |
 | *optional* PH-4502C | soil pH (1:2.5 soil-water slurry) | A1 |
 
-There is **no N-P-K sensor**. Parts, prices and the two-point moisture calibration are in [`hardware/CALIBRATION.md`](hardware/CALIBRATION.md).
+There is **no N-P-K sensor**. Use the capacitive moisture sensor, not the resistive fork, which corrodes.
+
+**Moisture calibration (two-point):** with `PRINT_RAW 1`, note the raw reading in sun- or oven-dried field soil (`RAW_DRY`) and in the same soil saturated with water (`RAW_SAT`). Set `SAT_VWC` to the soil's saturated water content (about 45 for loam/alluvial, 50 for black clay, 40 for red/sandy loam, 38 for sand). The sketch maps linearly between the two points to volumetric water content, the unit of the training data.
+
+**pH (optional PH-4502C):** mix 1 part soil with 2.5 parts distilled water, wait 30 min, and measure the liquid. Calibrate with pH 7 and pH 4 buffers, set `PH7_VOLT` and `PH_SLOPE`, and set `USE_PH 1`.
 
 **Reference sketch** (`agrismart_node.ino`). It prints a header line, `# moisture=vwc`, and then one CSV line per sample (`node_id,moisture_pct,soil_temp_c,air_temp_c,humidity_pct,ph`, with `nan` for a missing value). Settings at the top of the file:
 - `SAMPLE_MS` (2 min);
@@ -277,7 +274,7 @@ Top-1 accuracy without N-P-K is 0.81-0.90, but top-3 accuracy is about 0.99, so 
 
 ## 10. Novelty
 
-Details are in [`docs/NOVELTY.md`](docs/NOVELTY.md) and all numbers come from [`experiments/EXPERIMENTS_SUMMARY.md`](experiments/EXPERIMENTS_SUMMARY.md).
+All numbers come from the result files in `experiments/` (seed 42).
 
 | # | Contribution | Evidence |
 |---|---|---|
@@ -309,7 +306,7 @@ Details are in [`docs/NOVELTY.md`](docs/NOVELTY.md) and all numbers come from [`
 | 6 | context-aware re-ranking case study (N4) | `exp6_context_reranking/` |
 | 7 | extended comparison of 16 models | `exp7_extended_model_comparison/` |
 | 8 | regularisation (nested CV) | `exp8_regularization/` |
-| – | 26 report figures + confusion matrices | `experiments/figures/` (see `FIGURES_INDEX.md`) |
+| – | 26 report figures + confusion matrices | `experiments/figures/` |
 
 All runs use seed 42. To rebuild everything from the raw dataset:
 ```bash
@@ -328,14 +325,7 @@ python scripts/setup_database.py            # reload the database
 | GET | `/api/plots/<id>/readings?days=7` | time series of a plot |
 | GET | `/api/plots/<id>/recommend?month=11` | recommendation as JSON (not saved) |
 
-## 13. Reports and documents
-
-- `docs/NOVELTY.md`: the novel contributions, results and honest limitations.
-- `docs/LabAssessment9_NoveltyReport_AgriSmart.pdf` (+ `.docx`): the project details and novelty report.
-- `docs/AgriSmart_ConferencePaper.pdf` (+ `.docx`): the IEEE-format conference paper. It draws only on the project's code, experiment outputs and the team's Review-1 literature review.
-- `experiments/EXPERIMENTS_SUMMARY.md` and `experiments/figures/`: every result table and figure.
-
-## 14. Limitations
+## 13. Limitations
 
 - Moisture, soil temperature and soil type in the training data are **derived** with documented formulas, not measured in the field. The collection method of the public dataset is not documented in detail by its author.
 - The Exp 3 sensor windows are simulated around dataset rows.
@@ -343,7 +333,7 @@ python scripts/setup_database.py            # reload the database
 - The agronomic constants in `ml/crop_knowledge.py` (seasons, maturation days, typical yields) and the fertiliser prices in `database/generate_seed.py` still need to be checked against ICAR / Government of India sources.
 - The hardware test so far used one node without the DS18B20 soil-temperature probe, so soil temperature was estimated.
 
-## 15. Credits and references
+## 14. Credits and references
 
 The models are trained on the **Crop Recommendation Dataset** by **Atharva Ingle** (Kaggle, 2020). All credit for the original data goes to its author; please cite it if you reuse it and check the Kaggle page for its licence terms.
 
@@ -357,5 +347,3 @@ References used in the code:
 7. Maxim Integrated, *DS18B20 Programmable Resolution 1-Wire Digital Thermometer* datasheet (85 °C power-on reset value); DallasTemperature library (`DEVICE_DISCONNECTED_C = -127`).
 8. Aosong, *DHT11 Humidity & Temperature Sensor* datasheet (±2 °C, ±5 %RH).
 9. Oracle, *MySQL 8.0 Reference Manual* (CHECK constraints, triggers, stored programs, window functions).
-
-The full literature review (25 papers) and its references are in the conference paper in `docs/`.

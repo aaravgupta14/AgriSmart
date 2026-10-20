@@ -21,3 +21,8 @@ ml/models/*.joblib
 
 # stale copy of the SQL scripts (database/ is the current version)
 data/database/
+
+# reports/papers and Markdown notes are kept locally only (README.md stays published)
+docs/
+*.md
+!README.md
